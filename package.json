@@ -1,0 +1,21 @@
+{
+  "name": "xhs-auto-publisher",
+  "version": "2.0.0",
+  "description": "Fetch AI news from Twitter, translate with AI, publish to Xiaohongshu",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "publish": "node index.js publish",
+    "schedule": "node index.js schedule",
+    "stats": "node index.js stats",
+    "reset": "node index.js reset"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "openai": "^6.25.0",
+    "playwright": "^1.58.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

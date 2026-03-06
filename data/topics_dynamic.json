@@ -1,0 +1,205 @@
+{
+  "topics": [
+    {
+      "name": "Qwen3.5-35B-A3B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-9B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-35B-A3B-GGUF",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-27B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-0.8B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-4B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-397B-A17B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-9B-GGUF",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "MiniMax-M2.5",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Nanbeige4.1-3B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Huihui-Qwen3.5-35B-A3B-abliterated",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "GLM-5",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-122B-A10B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-27B-GGUF",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-2B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "LFM2-24B-A2B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "pplx-embed-v1-0.6b",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "DeepSeek-R1",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Kimi-K2.5",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "LocoOperator-4B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-27B-FP8",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-35B-A3B-FP8",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Huihui-Qwen3.5-27B-abliterated",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-4B-GGUF",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5-122B-A10B-GGUF",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "FireRed-OCR",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3-Coder-Next",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Omni-Video-Factory",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "qwen-image-multiple-angles-3d-camera",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "wan2-2-fp8da-aoti-preview",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Z-Image-Turbo",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "faster-qwen3-tts-demo",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3-TTS",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "FireRed-Image-Edit-1.0-Fast",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Omni-Image-Editor",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen-Image-Edit-2511-LoRAs-Fast",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "TRELLIS.2",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Wan2.2-Animate",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "LFM2.5-1.2B-Thinking-WebGPU",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "FLUX.2-klein-9B",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "wan2-2-fp8da-aoti-preview2",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "OmniLottie",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Flux2-Klein-Face-Swap",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen-Image-Edit-Angles",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Qwen3.5",
+      "addedAt": 1772678604819
+    },
+    {
+      "name": "Ryzen AI",
+      "addedAt": 1772699968714
+    },
+    {
+      "name": "Step-3.5-Flash-Base",
+      "addedAt": 1772701773404
+    },
+    {
+      "name": "Phi-4-reasoning-vision-15B",
+      "addedAt": 1772720017740
+    },
+    {
+      "name": "GPT-5.4",
+      "addedAt": 1772735106009
+    },
+    {
+      "name": "PageAgent",
+      "addedAt": 1772746918583
+    }
+  ],
+  "updatedAt": "2026-03-05T21:41:58.583Z"
+}
