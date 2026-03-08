@@ -32,8 +32,8 @@ const config = {
   cookiesFile: './xhs_cookies.json',
   publishedFile: './data/published_news.json',
   scheduler: {
-    minIntervalMs: 15 * 60 * 1000,
-    maxIntervalMs: 30 * 60 * 1000,
+    minIntervalMs: 10 * 60 * 1000,
+    maxIntervalMs: 25 * 60 * 1000,
   },
 };
 

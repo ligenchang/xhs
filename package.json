@@ -8,20 +8,12 @@
     "publish": "node index.js publish",
     "schedule": "node index.js schedule",
     "stats": "node index.js stats",
-    "reset": "node index.js reset",
-    "dev": "cd ui && npm run dev",
-    "build": "cd ui && npm run build",
-    "setup-ui": "cd ui && npm install"
+    "reset": "node index.js reset"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
     "openai": "^6.25.0",
-    "playwright": "^1.58.2",
-    "ws": "^8.14.2"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+    "playwright": "^1.58.2"
   },
   "engines": {
     "node": ">=14.0.0"
