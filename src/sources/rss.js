@@ -83,6 +83,20 @@ const FEEDS = [
     type: 'researcher',
     weight: 4,
   },
+  {
+    name: 'Machine Learning Mastery',
+    url: 'https://machinelearningmastery.com/feed/',
+    tier: 1.5,
+    type: 'researcher',
+    weight: 3,
+  },
+  {
+    name: 'Towards Data Science',
+    url: 'https://towardsdatascience.com/feed',
+    tier: 1.5,
+    type: 'researcher',
+    weight: 3,
+  },
 
   // ── Tier 1.8: AI Tool Launches ─────────────
   {
@@ -98,6 +112,20 @@ const FEEDS = [
     tier: 1.8,
     type: 'researcher',
     weight: 4,
+  },
+  {
+    name: 'Dev.to AI',
+    url: 'https://dev.to/api/articles?tag=ai&per_page=50',
+    tier: 1.8,
+    type: 'tool-launch',
+    weight: 3,
+  },
+  {
+    name: 'Papers with Code',
+    url: 'https://paperswithcode.com/latest',
+    tier: 1.8,
+    type: 'aggregator',
+    weight: 3,
   },
 
   // ── Tier 2: Engineering Media ──────────────
@@ -152,6 +180,34 @@ const AI_FILTER_KEYWORDS = [
   'tool-use', 'action', 'planning', 'autonomous',
   'reasoning', 'memory', 'function calling',
   'tool calling', 'agentic workflow',
+  // *** AGENTIC AI FRAMEWORKS (NEW) ***
+  'openclaw', 'crewai', 'langgraph', 'autogen',
+  'dify', 'flowise', 'swarm', 'smolagents',
+  'agent framework', 'multi-agent', 'agent orchestration',
+  'semantic kernel', 'llamaindex', 'ai agent',
+  'agent builder', 'agents', 'agentic ai',
+  // *** PRACTICAL TOOLS (NEW) ***
+  'claude code', 'claude compute', 'computer use',
+  'browser use', 'tool use', 'claude vision',
+  'mcp', 'model context protocol', 'tools.xml',
+  'bolt.new', 'v0.dev', 'lovable', 'replit',
+  'devin', 'github copilot', 'cline', 'aider',
+  'gpt engineer', 'gpt-4o', 'gpt-4', 'gpt-4 vision',
+  'o3', 'o1', 'reasoning model',
+  // *** ACCESSIBILITY & SETUP (NEW) ***
+  'no-code', 'low-code', 'easy setup', 'tutorial',
+  'getting started', 'open source', 'github',
+  'docker', 'self-hosted', 'on-premise',
+  // *** ECOSYSTEM TOOLS (NEW) ***
+  'langchain', 'llamaindex', 'vector database',
+  'supabase', 'firebase', 'postgresql',
+  'replicate', 'together', 'huggingface', 'modal',
+  'n8n', 'zapier', 'make', 'integromat',
+  // *** CAPABILITY KEYWORDS (NEW) ***
+  'computer vision', 'vision api', 'multimodal',
+  'text generation', 'image generation', 'code generation',
+  'natural language', 'nlp', 'speech',
+  'real-time', 'streaming', 'batch processing',
 ];
 
 function isAiRelevant(text) {

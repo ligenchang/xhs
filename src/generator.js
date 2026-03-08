@@ -4,7 +4,7 @@
 
 const OpenAI = require('openai').default;
 const config = require('./config');
-const { SYSTEM_PROMPT, CONTENT_PROMPT } = require('./prompts');
+const { SYSTEM_PROMPT, CONTENT_PROMPT, DESCRIPTION_PROMPT } = require('./prompts');
 
 const MIN_CHARS    = 600;
 const MAX_ATTEMPTS = 3;
@@ -208,4 +208,61 @@ async function generatePost(news) {
   }
 }
 
-module.exports = { generatePost };
+/**
+ * Generate a description for the post using LLM.
+ * Extracts key points and adds relevant hashtags (500-900 chars).
+ */
+async function generateDescription(title, content) {
+  console.log('\n✍️  生成正文描述...');
+  
+  try {
+    const raw = await streamCompletion([
+      { role: 'system', content: '你是小红书内容策略专家。按照用户要求生成500-900字的详细吸引人的正文描述和相关话题标签。' },
+      { role: 'user', content: DESCRIPTION_PROMPT(title, content) },
+    ], 0.8);
+    
+    // Extract description and hashtags separately
+    const lines = raw.trim().split('\n');
+    let description = '';
+    let hashtags = '';
+    
+    let inDescription = true;
+    for (const line of lines) {
+      if (line.startsWith('#')) {
+        inDescription = false;
+        hashtags += (hashtags ? ' ' : '') + line;
+      } else if (inDescription && line.trim()) {
+        description += (description ? '\n' : '') + line.trim();
+      }
+    }
+    
+    // Keep description content (up to 900 chars), ensure hashtags are preserved
+    let finalDescription = description;
+    if (finalDescription.length > 900) {
+      finalDescription = finalDescription.substring(0, 900).trim();
+      // Try to cut at word boundary
+      const lastSpace = finalDescription.lastIndexOf(' ');
+      if (lastSpace > 700) {
+        finalDescription = finalDescription.substring(0, lastSpace);
+      }
+    }
+    
+    // Add hashtags if present
+    if (hashtags) {
+      finalDescription += '\n\n' + hashtags;
+    }
+    
+    // Final safety limit to 1000 for fillDescription
+    finalDescription = finalDescription.substring(0, 1000);
+    
+    console.log(`  ✅ 描述已生成 (${finalDescription.length}/1000 字)`);
+    return finalDescription;
+  } catch (err) {
+    console.warn(`  ⚠️  描述生成失败: ${err.message}`);
+    // Fallback: use first 500 chars of content + hashtags
+    const fallback = content.substring(0, 500) + '\n\n#分享 #技术 #最新动态 #AI #开发';
+    return fallback.substring(0, 1000);
+  }
+}
+
+module.exports = { generatePost, generateDescription };

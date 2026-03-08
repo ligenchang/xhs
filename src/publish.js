@@ -3,7 +3,7 @@
  */
 
 const { findBestStory } = require('./news');
-const { generatePost }  = require('./generator');
+const { generatePost, generateDescription }  = require('./generator');
 const XhsBrowser        = require('./browser');
 const { hashText, save: saveHash } = require('./store');
 
@@ -29,19 +29,40 @@ async function publish() {
   console.log(`\n【正文】\n${content}`);
   console.log('\n' + '='.repeat(70) + '\n');
 
+  // 2b. Generate description with LLM
+  const description = await generateDescription(title, content);
+
+  console.log('\n' + '='.repeat(70));
+  console.log('📝 GENERATED DESCRIPTION');
+  console.log('='.repeat(70));
+  console.log(`\n【正文描述】\n${description}`);
+  console.log('\n' + '='.repeat(70) + '\n');
+
   // 3. Open browser and publish
   const browser = new XhsBrowser();
+  
   try {
     await browser.init();
     await browser.loadCookies();
-    await browser.ensureLoggedIn();
+    // await browser.ensureLoggedIn();
     await browser.navigateToEditor();
     await browser.fillTitle(title);
     await browser.page.waitForTimeout(500);
     await browser.fillContent(content);
+
     await browser.page.waitForTimeout(500);
-    await browser.smartClick('一键排版', 3000).catch(() => {});
+    await browser.smartClick('一键排版', 10000).catch(() => {});
+    await browser.page.waitForTimeout(2000);
+
+    // Random select a template
+    await browser.selectRandomTemplate();
+    await browser.page.waitForTimeout(3000);
+
+    // Click next step to confirm
+    await browser.clickNextStep();
+
     await browser.page.waitForTimeout(500);
+    await browser.fillDescription(description);
     await browser.publish();
     await browser.saveCookies();
   } finally {

@@ -199,7 +199,39 @@
     {
       "name": "PageAgent",
       "addedAt": 1772746918583
+    },
+    {
+      "name": "Crow-9B-Opus-4.6-Distill-Heretic_Qwen3.5",
+      "addedAt": 1772807113081
+    },
+    {
+      "name": "Qwen3.5-0.8B-GGUF",
+      "addedAt": 1772827579373
+    },
+    {
+      "name": "sarvam-105b",
+      "addedAt": 1772833648231
+    },
+    {
+      "name": "sarvam-30b",
+      "addedAt": 1772862729338
+    },
+    {
+      "name": "Anthropic AI",
+      "addedAt": 1772894465560
+    },
+    {
+      "name": "all-bench-leaderboard",
+      "addedAt": 1772902471289
+    },
+    {
+      "name": "UGI-Leaderboard",
+      "addedAt": 1772903912961
+    },
+    {
+      "name": "nano-banana",
+      "addedAt": 1772927696837
     }
   ],
-  "updatedAt": "2026-03-05T21:41:58.583Z"
+  "updatedAt": "2026-03-07T23:54:56.837Z"
 }

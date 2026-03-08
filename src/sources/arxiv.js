@@ -13,9 +13,9 @@
 const { fetchUrl } = require('./fetch');
 
 const ARXIV_FEEDS = [
-  // { name: 'arXiv cs.AI',  url: 'https://rss.arxiv.org/rss/cs.AI'  },
-  // { name: 'arXiv cs.LG',  url: 'https://rss.arxiv.org/rss/cs.LG'  },
-  // { name: 'arXiv cs.CL',  url: 'https://rss.arxiv.org/rss/cs.CL'  },
+  { name: 'arXiv cs.AI',  url: 'https://rss.arxiv.org/rss/cs.AI'  },
+  { name: 'arXiv cs.LG',  url: 'https://rss.arxiv.org/rss/cs.LG'  },
+  { name: 'arXiv cs.CL',  url: 'https://rss.arxiv.org/rss/cs.CL'  },
 ];
 
 // Only keep papers whose title/abstract touches practical AI topics

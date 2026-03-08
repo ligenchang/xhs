@@ -58,20 +58,13 @@ function scoreItem(item) {
   if ((labMentioned || modelMentioned) && isBreaking) score += 12;
   else if (labMentioned && modelMentioned) score += 8;
 
-  // Agentic AI frameworks (5 pts each) — prioritized
-  const agenticFrameworks = [
-    'openclaw', 'crewai', 'langgraph', 'autogen', 'dify', 'flowise', 'swarm',
-    'smolagents', 'agent framework', 'multi-agent', 'agentic ai', 'agent orchestration',
-  ];
-  agenticFrameworks.forEach((kw) => { if (lower.includes(kw)) score += 5; });
-
   // Named AI tools (3 pts each) — cast wider net for emerging tools
   const hotTools = [
     'claude code', 'cursor', 'windsurf', 'devin', 'copilot', 'replit',
     'manus', 'bolt.new', 'v0.dev', 'lovable', 'perplexity', 'chatgpt',
     'claude', 'gemini', 'gpt-4', 'gpt-5', 'deepseek', 'llama', 'mistral',
-    'qwen', 'grok', 'ollama', 'groq', 'openrouter', 'langchain',
-    'n8n', 'mcp protocol',
+    'qwen', 'grok', 'ollama', 'groq', 'openrouter', 'langchain', 'crewai',
+    'langgraph', 'autogen', 'dify', 'flowise', 'n8n', 'mcp protocol',
     // Emerging tools detection patterns
     'launches ai', 'open source llm', 'new model', 'ai startup',
     'open sources', 'releases new', 'introducing', 'announces', 'debuts',
@@ -153,9 +146,7 @@ function parseBirdOutput(raw) {
 }
 
 async function fetchTwitterTopics(topics, maxTopics = 6) {
-  // Always search for openclaw first, then add other topics
-  const uniqueTopics = ['openclaw', ...topics.filter(t => t.toLowerCase() !== 'openclaw')];
-  const shuffled = uniqueTopics.slice(0, maxTopics);
+  const shuffled = [...topics].sort(() => Math.random() - 0.5).slice(0, maxTopics);
   const items    = [];
 
   for (let i = 0; i < shuffled.length; i++) {
