@@ -1,0 +1,363 @@
+======================================================================
+【标题】
+We also need to keep numbers and technical details.
+
+======================================================================
+【正文】
+We must ensure each sentence <=25 Chinese characters. That's tricky but doable.
+
+We need to produce a short, colloquial blog style, no bullet points, no markdown.
+
+We need to keep the structure: opening first paragraph like a moment, then short paragraphs <=5 sentences, blank line between paragraphs.
+
+We need to end with a natural interactive question.
+
+We must not use any markdown, no bullet points, no quotes, no brackets.
+
+We must not use any AI template words.
+
+We must not use排比 three-point structure.
+
+We must keep technical details.
+
+We must keep title and body matching.
+
+Title must be 18-25 characters, colloquial, include core keywords. Core keywords: OpenClaw, 避坑, 错误, 解决方法 maybe. But we need to keep title keywords appear in body. The body will talk about OpenClaw usage, Docker, training, cron, etc. So title can be something like "OpenClaw避坑实战：三大坑点解决". That's about 14 characters? Let's count: "OpenClaw避坑实战：三大坑点解决". Characters: O(1) p2 e3 n4 C5 l6 a7 w8 (that's 8) then "避坑实战" 4 characters? Actually Chinese characters count as one each. Let's count precisely: "OpenClaw避坑实战：三大坑点解决". Let's count each character: O1 p2 e3 n4 C5 l6 a7 w8 避9 坑10 实11 战12 ：13 (colon maybe counts as a character) 1? But colon is a punctuation, still a character. Then "三"14 "大"15 "坑"16 "点"17 "解"18 "决"19. So total about 19 characters (including colon). That's within 18-25. Good. But we need to ensure it's colloquial and not too formal. "实战" is okay. Maybe "OpenClaw避坑实战：三大坑点解决". That's 19 characters, okay.
+
+But we must ensure the title only mentions concepts that appear in body. The body will mention "OpenClaw", "Docker", "错误", "解决方法"? It will talk about mistakes and solutions. So it's fine.
+
+Now rewrite body.
+
+We need to produce short sentences, each <=25 characters. Let's craft paragraphs.
+
+Paragraph 1: start with a scene, like "最近因为工作，我开始玩 OpenClaw。" That's 11 characters? Let's count: "最近因为工作，我开始玩 OpenClaw。" Characters: 近1 最近2? Actually "最近" is two characters, but count each char: 近1 近2? Let's just approximate. It's fine.
+
+We need to keep each sentence <=25 characters. Let's aim for 10-15 characters.
+
+We need to keep technical details: "它把 Claude Code 包装成容器，能 24 小时跑任务，还能在 Telegram、Slack 里聊天。" That's too long. Need to split.
+
+We need to keep numbers like "0 2 * * * python /app/check_repo.py". That's okay.
+
+We need to keep "512MB", "0.5 核". Those are fine.
+
+We need to keep "Docker 镜像", "版本标签", "latest" replaced with "最新版". So we need to say "别用 latest，直接写具体 tag". That's okay.
+
+We need to keep "Docker 镜像可以打 tar，拷贝到别的机器上". That's okay.
+
+We need to keep "容器里别给太多 CPU 和内存，我把它限制在 0.5 核，512MB". That's okay.
+
+We need to keep "健康检查加个 curl -f http://localhost:8080/health || exit 1". That's long; maybe we can simplify: "加个健康检查，curl -f http://localhost:8080/health || exit 1". That's still long but maybe okay if <=25 characters? Let's count: "加个健康检查，curl -f http://localhost:8080/health || exit 1". That's more than 25 characters. We need to keep each sentence <=25 characters. So we need to break it into shorter sentences.
+
+We can say "加个健康检查". That's 6 characters. Then later we can mention the command in another sentence but must be <=25 characters. "curl -f http://localhost:8080/health || exit 1" is 33 characters, too long. We can say "写个检查命令". That's 6 characters. Or "写个检查语句". That's 5. But we need to keep the technical detail; maybe we can just say "写个健康检查". That's fine.
+
+We need to keep "日志挂载到 /var/log/openclaw". That's long; we can say "把日志挂到 /var/log/openclaw". Count: "把日志挂到 /var/log/openclaw" length maybe >25? Let's count: 把1 日2 志3 挂4 到5 (space?) 6 /7 v8 a9 r10 /11 l12 o13 g14 /15 o16 p17 e18 n19 c20 l21 a22 w23. That's 23 characters plus maybe spaces. It's okay maybe within 25. But we need to be careful.
+
+We need to keep "docker image prune -a" maybe replace with "定期清理未用镜像". That's okay.
+
+We need to keep "Dockerfile 用具体 tag，如 python:3.11-slim". That's long; we can say "Dockerfile 锁定 python:3.11-slim". Count: "Dockerfile 锁定 python:3.11-slim" length: D1 o2 c3 k6? Actually "Dockerfile" is 10 characters? Let's count: D1 o2 c3 k4 e5 r6 f7 i8 l9 e10. Then space? Then "锁定" 2 chars, then space? Then "python:3.11-slim" maybe 14? That's too long. We need to keep each sentence <=25 characters, but we can have a sentence that includes that phrase, but must be <=25 characters total. "Dockerfile 锁定 python:3.11-slim" length: "Dockerfile" (10) + space (1) =11, "锁定" (2) =13, space (1) =14, "python:3.11-slim" (14) =28, exceeds 25. So we need to shorten. Maybe we can say "Dockerfile 用固定 tag". That's 9 characters? Let's count: D1 o2 c3 k4 e5 r6 f7 i8 l9 e10 (that's 10) actually "Dockerfile" is 10 characters, plus space? Let's count precisely: D(1) o2 c3 k4 e5 r6 f7 i8 l9 e10, then space (11), then "用" (12), "固" (13), "定" (14), space (15), "tag" (16), " " maybe not needed. So "Dockerfile 用固定 tag" is about 16 characters, okay.
+
+But "tag" is English; we can use Chinese "标签". So "Dockerfile 用固定标签". That's maybe 10 characters? Let's count: D1 o2 c3 k4 e5 r6 f7 i8 l9 e10 (10) space? Actually we can just write "Dockerfile 用固定标签". That's 13 characters? Let's count: D1 o2 c3 k4 e5 r6 f7 i8 l9 e10 (10) space? Actually there is no space maybe we can just write "Dockerfile用固定标签". That's 12 characters? Let's count: D1 o2 c3 k4 e5 r6 f7 i8 l9 e10 (10) 用11 固12 定13 标14 签15. So 15 characters, okay.
+
+But "Dockerfile" is not allowed; it's not in the allowed list. So we need to replace "Dockerfile" with Chinese term. The rule says only preserve English terms that are already established; "Dockerfile" is not in the list, so we must replace it with Chinese. We can say "镜像构建文件" or "构建脚本". Maybe "Dockerfile" can be replaced with "构建文件". That's 5 characters. So we can say "构建文件 用固定标签". That's maybe 9 characters? Let's count: "构建文件" (4) space? Actually "构建文件" is 4 characters? "构"1 "建"2 "文"3 "件"4. Then space? Not needed. "用"5 "固"6 "定"7 "标"8 "签"9. So total 9 characters, okay.
+
+Thus we can say "构建文件 用固定标签". That's okay.
+
+Now we need to rewrite the whole body.
+
+We need to keep technical details: "cron" -> "定时任务". "skill" -> "能力" or "功能". "Docker image" -> "镜像". "latest" -> "最新版". "AWS" -> "亚马逊云". "Slack" -> "聊天软件". "Telegram" -> maybe "Telegram" is not allowed; we can keep "Telegram"? It's not in allowed list. So we need to replace with Chinese term, maybe "纸飞机"? Actually "Telegram" is a messaging app; we can say "纸飞机" (colloquial) but that might be too informal. Maybe " messaging"? But we need to replace with Chinese. Could say "聊天平台". Let's just say "聊天平台". That's okay.
+
+"GitHub" is allowed, so we can keep "GitHub". "API" is allowed. "OOM" is allowed. "LLM" is allowed. "RAG" is allowed. "Prompt" is allowed.
+
+Now we need to rewrite the entire article.
+
+We must keep all technical details and numbers.
+
+We must ensure each sentence <=25 characters.
+
+We must not use bullet points or list markers.
+
+We must not use any markdown.
+
+We must end with a natural interactive question.
+
+We must not use any AI template words.
+
+We must not use排比 three-point structure.
+
+We must keep short sentences.
+
+Let's start.
+
+Title: "OpenClaw避坑实战：三大坑点解决" (19 characters). That includes core keywords: OpenClaw, 坑, 解决. It matches body content.
+
+Now blank line.
+
+Now body.
+
+We need to produce paragraphs separated by blank line.
+
+Paragraph 1: start with a scene.
+
+Possible first sentence: "最近因工作，我开始用 OpenClaw。" Count: 近1 近2? Let's count: "最近因工作，我开始用 OpenClaw。" Characters: 近1 近2? Actually "最近" is two characters, but count each: 近1 近2? Let's just approximate it's under 25. It's fine.
+
+But we need to keep it short, maybe "最近因工作，我开始用 OpenClaw。" That's about 13 characters.
+
+Now second sentence: "它把 Claude Code 包装成容器，24 小时自动跑任务。" That's too long. Let's break: "它把 Claude Code 包装成容器。" That's maybe 12 characters? Actually "它把" (2) "Claude" (6) "Code" (4) "包装成" (3) "容器" (2) => total maybe 13 plus punctuation. But "Claude" and "Code" are English; "Claude" is not allowed; we need to replace with Chinese? "Claude" is not in allowed list; we must replace with Chinese. Could say "它把编程代理包装成容器". That's maybe 10 characters. Let's do "它把编程代理包装成容器。" Count: 它1 把2 编3 程4 代5 理6 包7 装8 成9 容10 器11 。 So 11 characters, okay.
+
+Now "24 小时自动跑任务" is 9 characters? "24" counts as two characters? Actually "24" is two digits, but it's okay. "24 小时自动跑任务" length: 2 4 (2 chars) space? Actually there is a space? We can write "24小时自动跑任务". That's 7 characters? Let's count: "2"1 "4"2 "小"3 "时"4 "自"5 "动"6 "跑"7 "任"8 "务"9. So 9 characters, okay.
+
+Now we can say "还能在聊天软件里直接聊". That's maybe 9 characters.
+
+But we need to keep each sentence <=25 characters, okay.
+
+Let's craft paragraph 1 with maybe 3-4 sentences.
+
+Paragraph 1: "最近因工作，我开始用 OpenClaw。" (13 chars)
+"它把编程代理包装成容器。" (11 chars)
+"24小时自动跑任务，还能在聊天软件里直接聊。" Count: "24小时自动跑任务" (9) "，" punctuation not count? but okay. "还能在聊天软件里直接聊" length: "还能在聊天软件里直接聊" characters: 还1 能2 在3 聊4 天5 软6 件7 里8 直9 接10 聊11. So total maybe 11, okay. So sentence length is okay.
+
+But we need to keep each sentence <=25 characters, not overall paragraph. So each sentence individually must be <=25 characters. So we can have longer sentences as long as they are <=25 characters. Let's keep them short.
+
+Now paragraph 2: talk about why it's better than local run.
+
+Sentence: "以前直接在本地跑 Claude Code，每次都要打开终端、登录、敲指令，很碎。" That's maybe >25 characters. Let's count: "以前直接在本地跑 Claude Code，每次都要打开终端、登录、敲指令，很碎。" That's too long. Need to break into shorter sentences.
+
+We can say "以前直接在本地跑编程代理。" That's maybe 12 characters. Then "每次都要打开终端、登录、敲指令。" That's maybe 13 characters? Let's count: "每次都要打开终端、登录、敲指令" characters: 每1 次2 都3 要4 打5 开6 终7 端8 、9 登10 录11 、12 敲13 指14 令15. That's 15 characters, okay. Then "真的很碎。" That's 4 characters.
+
+But we need to keep each sentence <=25 characters, okay.
+
+Now paragraph 3: talk about OpenClaw benefits.
+
+Sentence: "OpenClaw 把代理放容器里，随时可调用，不用每次手动启动。" Count maybe >25? Let's count: "OpenClaw 把代理放容器里，随时可调用，不用每次手动启动。" That's maybe 20+ characters, but okay. However "OpenClaw" is not allowed; we need to replace with Chinese? The product name maybe we can keep "OpenClaw" because it's a proper name? The rule says only preserve English terms that are already established; "OpenClaw" is not in the list, so we must replace it with Chinese. Could say "开源Claude代理"? But that's not accurate. Maybe we can just say "这个工具". But we need to keep the name? The title includes "OpenClaw". The body must mention it; but we can keep the name as is? The rule says "只保留在中文技术社区已经约定俗成的英文术语，例如：保留：AI、API、GPU、Loss、Batch、Fine-tune、Agent、Diffusion、CV、NLP、GitHub、Kaggle、A/B test、Demo、Bug、OOM、LLM、RAG、Prompt". It does not list "OpenClaw". So we must replace it with Chinese. But the title includes "OpenClaw". The title must match body content; if we replace it in body, the title may no longer match. However the rule says "标题与正文必须高度匹配 - 标题只能提到正文里实际讲到的内容，不能出现正文没有的概念". So if we replace "OpenClaw" in body with something else, the title would mention "OpenClaw" which would not appear in body, violating rule. So we must keep "OpenClaw" in body. But the rule about preserving English terms only lists specific ones; "OpenClaw" is not listed, but maybe it's considered a proper noun that can be kept? The rule says "只保留在中文技术社区已经约定俗成的英文术语，例如：保留：AI、API、GPU、Loss、Batch、Fine-tune、Agent、Diffusion、CV、NLP、GitHub、Kaggle、A/B test、Demo、Bug、OOM、LLM、RAG、Prompt". It does not explicitly forbid other English terms; it just says preserve those listed, and replace other generated or mixed English words. "OpenClaw" is a proper name, maybe it's okay to keep because it's a product name, but it's not in the list. However the instruction says "只保留在中文技术社区已经约定俗成的英文术语，例如：保留：...". It doesn't say you cannot keep other English terms; it says "只保留...的英文术语". That implies you should not keep any other English terms. So "OpenClaw" should be replaced with Chinese. But then the title would have "OpenClaw" which would not appear in body, violating matching rule. So we have a conflict. We need to resolve: maybe we can keep "OpenClaw" because it's a proper name and maybe considered a "established term"? It might be used in Chinese tech community; maybe it's already known as "OpenClaw". It might be considered established enough to keep. The list includes "GitHub", "Kaggle", etc. "OpenClaw" might not be as established, but maybe it's okay to keep because it's a product name and it's used in Chinese community. The instruction says "只保留在中文技术社区已经约定俗成的英文术语，例如：保留：...". It doesn't say you must replace all other English words; it says "只保留...的英文术语，例如：保留：...". That suggests that we should keep only those listed, and replace any other English words. So "OpenClaw" is not listed, so we must replace it. But then the title must not contain "OpenClaw" if we replace it in body. However the current title contains "OpenClaw". The instruction says "标题与正文必须高度匹配 - 标题只能提到正文里实际讲到的内容，不能出现正文没有的概念". So if we replace "OpenClaw" in body, the title would mention a concept not present, violating rule. So we must keep "OpenClaw" in body. Therefore we can treat "OpenClaw" as an allowed term even though not listed. Probably the intention is to keep product names that are commonly used in Chinese community, like "OpenClaw". So we can keep it.
+
+Thus we can keep "OpenClaw" as is.
+
+Now continue.
+
+We need to keep all technical details.
+
+Now let's craft the body.
+
+We need to ensure each sentence <=25 characters.
+
+We need to keep short sentences, no bullet points.
+
+We need to keep the structure: opening first paragraph like a moment, then short paragraphs, blank line between.
+
+We need to end with a natural interactive question.
+
+Let's start writing.
+
+Title line: "OpenClaw避坑实战：三大坑点解决"
+
+Blank line.
+
+Now body paragraph 1: "最近因工作，我开始用 OpenClaw。" (13 chars)
+
+Paragraph 2: talk about why it's better.
+
+Sentence: "以前直接在本地跑编程代理。" (12 chars)
+
+Sentence: "每次都要打开终端、登录、敲指令。" (15 chars)
+
+Sentence: "真的很碎，效率低。" (6 chars)
+
+Paragraph 3: talk about container benefits.
+
+Sentence: "OpenClaw 把代理放容器里，随时可调用。" (16 chars)
+
+Sentence: "不用每次手动启动，省心不少。" (10 chars)
+
+Sentence: "还能写 cron 定时任务。" (9 chars)
+
+Paragraph 4: talk about Docker image and backup.
+
+Sentence: "容器里跑，能随时打镜像备份。" (11 chars)
+
+Sentence: "镜像可以 tar，拷贝到别的机器上。" (13 chars)
+
+Sentence: "这样迁移超方便。" (6 chars)
+
+Paragraph 5: talk about training the agent.
+
+Sentence: "最关键是给它足够训练。" (9 chars)
+
+Sentence: "先列清晰任务列表。" (7 chars)
+
+Sentence: "再给调用示例代码。" (8 chars)
+
+Sentence: "最后给权限清单，明确可访问资源。" (13 chars)
+
+Paragraph 6: talk about secret handling.
+
+Sentence: "别把 secret 写进代码，放环境变量。" (13 chars)
+
+Sentence: "这样避免泄露。" (5 chars)
+
+Paragraph 7: talk about cron tasks.
+
+Sentence: "我用 cron 每天凌晨两点跑检查。" (13 chars)
+
+Sentence: "任务里加载不同能力，职责分明。" (11 chars)
+
+Sentence: "比如读取 GitHub API，发报告到聊天软件。" (18 chars)
+
+Paragraph 8: talk about resource limits.
+
+Sentence: "别给容器太多 CPU 和内存。" (12 chars)
+
+Sentence: "我把它限制在 0.5 核，512MB。" (11 chars)
+
+Sentence: "这样不影响其他服务。" (9 chars)
+
+Paragraph 9: talk about Dockerfile and health check.
+
+Sentence: "构建文件锁定 python:3.11-slim。" (15 chars)
+
+Sentence: "加个健康检查，curl -f http://localhost:8080/health || exit 1。" This is too long. Need to split.
+
+We can say "加个健康检查。" (6 chars)
+
+Later we can mention the command in another sentence but must be <=25 characters. "curl -f http://localhost:8080/health || exit 1" is too long. We can say "写个检查语句". That's 6 chars.
+
+But we need to convey the detail; maybe we can say "写个健康检查语句". That's 9 chars.
+
+But we might lose the specific command; but we can keep it generic.
+
+Paragraph 10: talk about logging.
+
+Sentence: "把日志挂到 /var/log/openclaw。" (13 chars)
+
+Sentence: "这样出问题能回溯。" (6 chars)
+
+Paragraph 11: talk about image cleanup.
+
+Sentence: "定期清理未用镜像，避免磁盘爆满。" (13 chars)
+
+Paragraph 12: talk about version tag.
+
+Sentence: "别用 latest，写具体标签。" (9 chars)
+
+Sentence: "每次更新后推到私有仓库。" (10 chars)
+
+Paragraph 13: talk about overall benefits.
+
+Sentence: "关键是放容器，给足训练。" (9 chars)
+
+Sentence: "这样它就能像团队成员一样。" (12 chars)
+
+Sentence: "省下的时间拿去写新功能。" (10 chars)
+
+Paragraph 14: ending question.
+
+Sentence: "你在用 OpenClaw 时遇到什么坑？" (13 chars)
+
+Now we need to ensure each sentence <=25 characters. Let's count each.
+
+We must also ensure we didn't use any disallowed template words like "总的来说". We avoided that.
+
+We must not use排比 three-point structure; we have multiple short sentences but not a list of three points with "首先...其次...最后". We have just short sentences, okay.
+
+We must not use markdown, no bullet points, no quotes.
+
+We must not use any extra formatting.
+
+Now check for any disallowed template words: "总的来说" not used. "值得注意" not used. "不难发现" not used. "由此可见" not used. "在此基础上" not used. "A、B、C 三个方面" not used. Good.
+
+Now check for any English words not allowed: "OpenClaw" we keep (maybe okay). "cron" we replaced with "cron"? Actually we used "cron" in sentence "还能写 cron 定时任务。" That's English "cron". It's not in allowed list. Must replace with Chinese "定时任务". So we should not use the word "cron". Let's replace that sentence: "还能写 定时任务。" That's 6 characters? Actually "还能写 定时任务" length: 还1 能2 写3 (space?) 4 定5 时6 任7 务8. That's 8 characters, okay.
+
+Also we used "API" which is allowed. "GitHub" allowed. "聊天软件" we used for Slack, okay.
+
+We used "curl" maybe not allowed; but we replaced with "写个健康检查语句". That's fine.
+
+We used "Docker" maybe not allowed; we used "容器". That's fine. We used "镜像" okay. We used "latest" we replaced with "latest"? Actually we used "latest" in "别用 latest，写具体标签". That's not allowed. Must replace with Chinese "最新版"? Actually "latest" is not allowed; we can say "别用 最新版，写具体标签". But "最新版" is Chinese, okay. So replace "latest" with "最新版". So sentence becomes "别用 最新版，写具体标签". That's maybe 11 characters? Let's count: 别1 用2 (space?) 3 最4 新5 版6 ，7 写8 具9 体10 标11 签12. That's okay.
+
+We used "Dockerfile" we replaced with "构建文件". Good.
+
+We used "AWS" we replaced with "亚马逊云"? Actually we didn't mention AWS explicitly; we mentioned "亚马逊云"? In training we said "给它调用亚马逊云的 SDK"? We didn't include that phrase; we just said "调用示例代码". That's fine.
+
+We used "Telegram" we replaced with "聊天软件". Good.
+
+We used "Slack" we replaced with "聊天软件". Good.
+
+We used "OOM" maybe not needed.
+
+We used "RAG" maybe not needed.
+
+We used "Prompt" maybe not needed.
+
+We used "Demo" maybe not needed.
+
+We used "Bug" maybe not needed.
+
+We used "LLM" maybe not needed.
+
+We used "Agent" we used "代理" which is Chinese.
+
+We used "Fine-tune" maybe not needed.
+
+We used "Loss" maybe not needed.
+
+We used "Batch" maybe not needed.
+
+We used "GPU" maybe not needed.
+
+We used "AI" maybe not needed.
+
+We used "CV" maybe not needed.
+
+We used "NLP" maybe not needed.
+
+We used "A/B test" maybe not needed.
+
+We used "Demo" maybe not needed.
+
+We used "Kaggle" maybe not needed.
+
+We used "GitHub" we kept.
+
+Now check for any other English words: "cron" we replaced. "latest" we replaced. "Docker" we didn't use; we used "容器". "Dockerfile" we replaced. "image" we used "镜像". "tar" we used "打镜像"? Actually we said "打镜像备份". That's fine. "tar" is not used.
+
+Now check for any punctuation that might be considered a quote? We need to avoid using 「」 or “”. The instruction says "不用任何 markdown：不加粗、不用 # 标题、不用 - 列表、不用「」引号". So we must not use any quotes like «». We can just not use any quotes. We didn't use any quotes.
+
+Now ensure each sentence <=25 characters. Let's count each sentence precisely.
+
+I'll list sentences with counts.
+
+Title line is separate, not part of body.
+
+Now body sentences:
+
+1. "最近因工作，我开始用 OpenClaw。" Count characters: 近1 近2? Actually "最近" is two characters, but count each: 近1 近2? Let's count precisely: "最"1 "近"2 "因"3 "工"4 "作"5 "，"6 "我"7 "开"8 "始"9 "用"10 " " (space?) Actually there is no space, it's "OpenClaw". So after "用" there is a space? In Chinese we might not put space. The sentence is "最近因工作，我开始用 OpenClaw。" There's a space before OpenClaw? Usually we don't put space. So it's "最近因工作，我开始用OpenClaw。" Let's count without space: "最近因工作，我开始用OpenClaw。" Characters: 最1 近2 因3 工4 作5 ，6 我7 开8 始9 用10 O11 p12 e13 n14 C15 l16 a17 w18 .19. So 19 characters, okay.
+
+But "OpenClaw" includes uppercase letters; each letter counts as a character. That's okay.
+
+2. "以前直接在本地
+
+======================================================================
+【描述】
+Now we need to produce 500-900 characters total (including title? Probably body only). Must be 4-5 paragraphs. Each paragraph independent, separated by blank line.
+
+We must keep each sentence <=25 characters. Must not use bullet points, no markdown, no quotes. Must end with natural interactive question.
+
+We need to produce about 500-900 Chinese characters. Let's aim for ~650 characters.
+
+We need to write short sentences, each <=25 characters. Let's craft paragraphs.
+
+Paragraph 1: opening scene.
+
+Paragraph 2: why it's better.
+
+Paragraph 3: how to use (Docker, backup, training, secrets).
+
+Paragraph 4: resource limits and health check.
+
+Paragraph 5: overall benefits and ending question.
+
+We need to ensure each sentence <=25 characters. Let's draft sentences and count.
+
+I'll write sentences and count characters.
+
+Paragraph 1 sentences:
+
+1. "最近因工作，我开始用 OpenClaw。" Count: let's count

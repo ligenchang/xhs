@@ -9,6 +9,7 @@
  *   node index.js now        # publish immediately (testing)
  *   node index.js url <URL>  # publish from a custom URL
  *   node index.js url <URL1> <URL2> <URL3>  # publish from multiple URLs for more context
+ *   node index.js topic <keyword>  # publish focusing on a specific topic
  *   node index.js schedule   # run on a random interval loop
  *   node index.js test-schedule # schedule with 10-20 second intervals (testing)
  *   node index.js stats      # show published count
@@ -19,6 +20,29 @@
 const command = process.argv[2] || 'publish';
 const urls = command === 'url' ? process.argv.slice(3) : [];
 
+// topic <keyword> — focus on a specific topic
+if (command === 'topic') {
+  const keyword = process.argv.slice(3).join(' ');
+  if (!keyword) {
+    console.error('Usage: node index.js topic <keyword>');
+    console.error('Example: node index.js topic "Claude 4"');
+    process.exit(1);
+  }
+  process.env.FOCUS_TOPIC = keyword;
+  console.log(`🎯 Topic focus: "${keyword}"`);
+}
+
+// schedule topic <keyword> — run scheduler focused on a topic
+if (command === 'schedule' && process.argv[3] === 'topic') {
+  const keyword = process.argv.slice(4).join(' ');
+  if (!keyword) {
+    console.error('Usage: node index.js schedule topic <keyword>');
+    console.error('Example: node index.js schedule topic "Claude 4"');
+    process.exit(1);
+  }
+  process.env.FOCUS_TOPIC = keyword;
+  console.log(`🎯 Scheduler topic focus: "${keyword}"`);
+}
 if (command === '--help' || command === '-h' || command === 'help') {
   console.log(`
 🚀 XHS Auto Publisher
@@ -28,9 +52,23 @@ Commands:
   now            Publish immediately (testing)
   url <URL>      Publish from a custom URL or multiple URLs (supports HTML & PDF)
   schedule       Auto-publish every 20–40 minutes
+  schedule topic <kw>  Schedule with topic focus (e.g. schedule topic LLM)
   test-schedule  Auto-publish every 10–20 seconds (for testing)
+  topic <kw>     Publish once focusing only on articles matching keyword
   stats          Show published post count
   reset          Clear published history
+
+Examples:
+  # Focus on a specific topic (publish once):
+  node index.js topic "Claude 4"
+  node index.js topic "Diffusion Model"
+
+  # Run scheduler focused on a topic:
+  node index.js schedule topic LLM
+  node index.js schedule topic "RAG systems"
+
+  # Or via env var (works with any command):
+  FOCUS_TOPIC="LangChain" node index.js schedule
 
 Examples:
   # Single URL:
@@ -73,6 +111,7 @@ async function main() {
   switch (command) {
     case 'publish':
     case 'now':
+    case 'topic':
       await require('./src/publish').publish();
       break;
 

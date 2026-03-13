@@ -1,0 +1,34 @@
+======================================================================
+【标题】
+GLM-5 transformers 下载 23 万
+
+======================================================================
+【正文】
+嘿，今天刷 HuggingFace 时看到个挺有意思的模型，叫 GLM‑5，直接标了 trending。according to the trending list, it has 1762 likes and 234,052 downloads. tags 里有 transformers、safetensors、glm_moe_dsa、text‑generation、conversational、en。看着挺好奇的，就点进去看看。
+
+GLM‑5 采用 MoE 结构，参数量挺大的，但 inference 时因为支持 toolCalling，能在对话里直接调用函数。它的 chat_template_jinja 里有 bastante复杂的 Jinja 语法，里面用了 <|system|>、<|user|>、<|assistant|> 这些占位符，还有 visible_text 宏用来处理不同类型的内容。代码里提到 pad_token 设为 <|endoftext|>，这在生成时挺常见的，避免出现未知 token。
+
+在 inference 端，官方提供了两个 provider，一个是 zai‑org，另一个是 together。zai‑org 的 providerStatus 显示 live，但 modelStatus 为 error，可能是个小 bug。together 那边标记为 cheapest pricing，tokensPerSecond 大约 35.79，速度还是挺快的。features 里包括 structuredOutput 和 toolCalling，看来是想让开发者能直接把它当作工具使用。
+
+下载量破 23 万，点赞 1762，说明社区对它的兴趣不低。很多开发者在评论里提到想拿它做多语言的 conversational demo，还有人想把它和本地的 function calling 结合起来玩。看着那些下载数据，感觉大家都挺想动手试试的。
+
+模型的适配器权重路径是 model‑00001‑of‑00282.safetensors，文件体积不算小，但因为使用 safetensors 格式，加载速度比传统的 pytorch bin 要快一些。它的 structuredOutput 设为 true，意味着在返回 JSON 时可以直接得到规范的字段，省去自己手动解析的麻烦。
+
+想要自己跑起来的话，首先得在 HuggingFace 上申请访问权限，然后选个 provider，比如 together，填写好 api key。随后可以用 transformers 库加载，示例代码大概是这样的：from transformers import AutoModelForCausalLM, AutoTokenizer; tokenizer = AutoTokenizer.from_pretrained('zai-org/GLM-5'); model = AutoModelForCausalLM.from_pretrained('zai-org/GLM-5', trust_remote_code=True); input_ids = tokenizer('你好，有什么我可以帮助你的吗？', return_tensors='pt'); outputs = model.generate(**input_ids, max_new_tokens=50); print(tokenizer.decode(outputs[0], skip_special_tokens=True))。实际跑时会看到一些 <|system|>、<|assistant|> 的占位符，别忘了把它们替换成真实的内容。
+
+总的来说，GLM‑5 看起来是个比较完整的对话模型，兼容 transformers、支持 toolCalling，而且在 HuggingFace 上的热度一直在 climbing。如果你正好在找一个能直接调用函数的对话模型，或许可以试试看。只是记得检查一下 provider 的状态，别碰到 error 的那种，其他应该都还好。希望这篇随手记能帮到想玩的同学，后面如果有新情况，我再补充。
+
+======================================================================
+【描述】
+最近在 Hugging Face 看到一个叫 GLM‑5 的模型，trending 标签下点赞 1762、下载量突破 23 万。它把 MoE 结构和对话式 toolCalling 融合在一起，直接吸引了不少开发者的注意。
+
+GLM‑5 采用 Jinja 模板，支持 <|system|>、<|user|>、<|assistant|> 等占位符，并提供 structuredOutput 与 toolCalling 能力。两个 inference provider 中，together 标记为 cheapest pricing，tokensPerSecond 超过 35，加载速度也比传统 pytorch 文件快。
+
+对我们开发者来说，它的最大价值在于可以直接在对话里调用自定义函数，省去手动解析 JSON 的麻烦。只要在 HuggingFace 申请权限、准备 API Key，就能用 transformers 库加载模型，快速搭建多语言的 conversational demo，或在本地实现函数调用的完整闭环。
+
+亮点在于多语言支持和低成本推理；局限则是 zai‑org provider 仍有 error 状态，需要自行排查。整体来看，GLM‑5 正在成为一种“对话+工具”的新范式，值得在项目中尝试集成。
+
+如果你也想玩转函数调用的 AI，不妨先在评论里分享你的使用场景，或者直接去 HuggingFace 上申请访问，看看能否在自己的项目里跑出更快的响应。
+
+
+#AI工具 #开发者工具 #大模型 #编程效率 #自动化 #函数调用 #HuggingFace

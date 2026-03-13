@@ -1,0 +1,34 @@
+======================================================================
+【标题】
+Go二进制通过PyPI发布的实战指南
+
+======================================================================
+【正文】
+最近我在折腾Go，想把一些小工具做成单文件可执行程序。Go的语法确实比较直白，代码看起来很 boring，而且LLM写出来的代码也很可靠。不过最头疼的就是怎么把编译好的二进制分发给别人用。传统方式要么是发 releases，让用户自己下载，还得在 macOS 里打开不安全的权限，要么是让用户自己装 Go 环境再编译。这时候想到 PyPI 这类包管理平台，或许能直接把二进制装进去，让pip或者 uvx 一键调用。于是就有了 go-to-wheel 这类方案，把 Go 编译的可执行文件打包成 wheel，然后通过 Python 的包机制来分发。
+
+我最近写了一个叫 sqlite-scanner 的 CLI 工具，用来递归扫描目录查找 SQLite 数据库文件。它的实现很简单，就是检查文件前 16 个字节是否匹配 SQLite magic number SQLite format 3\x00，然后用 goroutine 并发读取，结果以明文、JSON 或 newline-delimited JSON 输出。扫描过程是流式的，不会把整个文件读进内存，所以即使是大硬盘也不会卡住非常非常
+
+最开始的使用方式是手动下载 release 并跑 chmod，或者自己 clone 代码编译。后来发现可以直接用 uvx sqlite-scanner  来运行，或者pip install sqlite-scanner 后直接执行。更酷的是，如果你用 uv tool install sqlite-scanner，也能得到一个永久可用的版本。这样一来，谁都可以在几秒钟内把扫描工具装上，不用再折腾权限和依赖。
+
+PyPI 的 wheel 文件名里已经把平台信息写得明明白白，比如 sqlite_scanner-0.1.1-py3-none-win_arm64.whl、sqlite_scanner-0.1.1-py3-none-manylinux_2_17_x86_64.whl 这些后缀决定了系统会选哪个二进制。pip install 或者 uvx 会自动匹配当前机器的 OS 与架构，所以在 Apple Silicon Mac 上会下载 macosx_11_0_arm64 的 wheel，在 Windows 上会选 win_amd64。wheel 本质上是一个 zip，里面除了 bin/sqlite-scanner 之外，还有一个 sqlite_scanner/__init__.py，里面写了 get_binary_path() 之类的函数，负责把 bundled binary 设为可执行，然后在 __main__ 里调用 os.execvp 之类的系统调用直接替换进程。这里要注意几个细节：在 Unix 系统下需要手动给二进制加执行权限，代码里用 stat.S_IXUSR 之类的检查；在 Windows 上要用 subprocess.call 来正确处理信号；还有入口函数 main() 会把 argv 传给二进制。所有这些逻辑都写在 Python 包里，所以用户看到的只是一个普通的 pip 包，其实背后跑的还是 Go 编译的二进制。
+
+这样做的好处是，Go 开发者可以把自己的工具当作依赖直接引入 Python 项目，其他语言的程序员也能通过熟悉的包管理工具直接装到位。虽然从哲学上有点怪，但从实用角度看，确实省了不少麻烦。尤其是在 CI 环境里，只需要在 requirements.txt 里加上 sqlite-scanner，就能自动拉到对应平台的二进制，省去手动下载的步骤非常非常
+
+总的来说，把 Go 二进制发布到 PyPI 并不是什么新鲜事，但 go-to-wheel 让它变得更加方便。只要把 wheel 放上去，配上合适的命名规则，就能让不同系统的用户一键安装。以后如果还有其他小工具想分发，我会继续尝试这种方式，也许还能把一些常用的命令行工具直接变成 pip 包，让大家的开发环境更加统一。 
+
+（完）
+
+======================================================================
+【描述】
+最近在 Go 生态里看到一个新玩法：把编译好的二进制直接打包进 PyPI，让 pip 或 uvx 一键装起来。对我们这些天天写脚本、搬砖的开发者来说，这意味着不再需要手动下发 release、也不必每台机器都装 Go 环境，直接当 Python 包用。
+
+核心思路是利用 wheel 的平台后缀自动匹配系统，把 Go 编译的可执行文件嵌入到 Python 包里，再通过 get_binary_path() 之类的函数在运行时把它设为可执行，最终实现一次 pip install 就能在任何机器上直接运行。
+
+这样我们可以把像 sqlite‑scanner、go‑to‑wheel 之类的工具当作普通依赖引入项目，CI 只需要在 requirements.txt 加一行，就能在不同 OS 上自动拉取对应的二进制，省去手动 chmod、权限配置的麻烦。
+
+从技术角度看，这种混合包装虽然有点哲学上的怪异——把二进制藏在纯 Python 包里—but 它极大地简化了跨平台分发，也推动了命令行工具向 pip 生态迁移的趋势。当然，维护成本和安全审计会更高，但对小工具而言是值得尝试的。
+
+如果你也有类似的 Go 小工具，不妨试着把它发布到 PyPI，或者直接用 uvx 运行看看效果。欢迎在评论里分享你的使用场景或遇到的坑，我会一起探讨改进方案。
+
+
+#Go #PyPI #CLI #DevTools #PackageManagement #OpenSource

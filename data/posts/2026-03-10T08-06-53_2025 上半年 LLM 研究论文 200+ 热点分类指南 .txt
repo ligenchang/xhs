@@ -1,0 +1,38 @@
+======================================================================
+【标题】
+2025 上半年 LLM 研究论文 200+ 热点分类指南 精读推荐 必读 必看
+
+======================================================================
+【正文】
+hey，大家好啊，今天想聊聊最近在社区里流传最广的 LLM 研究论文合集。最近看到有不少朋友在聊 2025 上半年的热点论文，尤其是那些围绕 reasoning、reinforcement learning 以及 efficient training 这些关键词的作品。我自己也在闲余时间维护一个个人的 paper 列表，之前已经分享过 2024 年的版本，这次直接把时间窗口推到 2025 年一到六月，然后把论文按照topic 进行归类，希望能帮助大家快速定位自己感兴趣的方向。
+
+我之所以把论文划分成几个大类，首先是因为之前的反馈里有很多人希望能看到更有结构的组织方式，而不是单纯的时间顺序。于是我把主要的topic 分成了几块：Reasoning Models、Other Reinforcement Learning Methods for LLMs、Efficient Training & Architectures、Diffusion‑Based Language Models、Multimodal & Vision‑Language Models、Data & Pre‑training Datasets。每个大类下面再细分出几个子主题，比如 Reasoning Models 里面有 Training Reasoning Models、Inference‑Time Reasoning Strategies、Evaluating LLMs and/or Understanding Reasoning。这样不管是想深入研究训练技巧的同学，还是想了解推理时的 scaling 方法的朋友，都能在一眼之内抓住重点。
+
+在 Reasoning Models 这个大类下，我再细分成了三个子方向：Training Reasoning Models、Inference‑Time Scaling Methods、以及更一般的 Understanding/evaluation。Training Reasoning Models 里面聚焦于那些利用 RL、process reward、verifiable reward 等手段提升模型推理能力的工作。最近的热点论文里，像是 "Reinforcement Pre‑Training"、"Meta Chain‑of‑Thought"、"Process Reward Models in Mathematical Reasoning"、"Large Reasoning Models: A Survey"、"Kimi k1.5: Scaling Reinforcement Learning with LLMs"、"DeepSeek‑R1: Incentivizing Reasoning Capability in LLMs via RL" 这些都被我标记为必读。每篇论文旁边我都会标注一下 arXiv 的编号和发布时间，方便大家直接去检索。
+
+另外，我把整个列表拆成了 bi‑yearly 的更新节奏，这样每次只聚焦在最近半年的新鲜内容，既能保持列表的可读性，也能让阅读任务更加轻松。特别是到了夏季，很多同学会利用这段时间准备实习面试，或者是想在技术栈上再补一补先进的研究动态。为了配合这个季节，我特意把我的《Machine Learning Q and AI》这本书的全部 30 章节在夏季期间免费开放，涵盖了从基础概念到中高级实战技巧的完整内容。这个资源对想系统梳理机器学习知识的同学来说是个不错的补充，尤其是在准备技术面试时，能够快速回顾关键点。
+
+在实际的内容输出上，我会先把每个大类的核心论文列出来，然后挑选几篇我觉得最具代表性的进行简要点评。比如在 Training Reasoning Models 里面，我会提到一些利用 outcome reward 进行数学推理的论文，还有像 "Exploring the Limit of Outcome Reward for Learning Mathematical Reasoning" 这样专注于提升模型在复杂推理任务上的表现的工作。还有像 "Teaching Language Models to Critique via RL"、"Training Language Models to Reason Efficiently" 这些在提升模型自我检查和推理效率方面的研究，都值得我们重点关注。
+
+除了 Reasoning Models，我还留意到了一些其他的新兴方向，比如 Diffusion‑Based Language Models，这类模型通过扩散过程生成文本，在某些生成任务上展现出不错的潜力。还有 Multimodal & Vision‑Language Models，它们把图像、音频等多模态信息融合进语言模型，为跨模态任务打开了新的可能性。数据层面的研究同样不容忽视，尤其是大规模的预训练数据集的构建与清洗方法，这些都直接影响到模型的最终性能。
+
+在整理这些论文的过程中，我发现很多工作其实并不是全新的创新，而是对已有方法的改进或扩展。比如一些 Inference‑Time Scaling Strategies 其实是在已有的 chain‑of‑thought、self‑consistency 等技术上叠加了额外的计算资源，以换取更好的推理质量。这类工作往往在实际部署时会被很多工程师所关注，因为它们提供了在不改变模型结构的前提下提升性能的一种捷径。
+
+总的来说，这个 2025 上半年的 LLM 论文列表是一个比较开放的参考框架，我会在后续的文章里逐步深入探讨其中的几个更感兴趣的子话题，比如大规模推理模型的训练细节、process reward 的具体实现、以及如何在实际项目中落地这些研究成果。希望大家能通过这个列表找到自己需要的阅读材料，同时也能在阅读过程中发现一些新的灵感或思路。
+
+最后，想跟大家说一句，夏天真的挺适合坐在空调房里翻点技术书、看点论文的。无论是准备面试、想要提升自己的研究深度，还是单纯想跟上 AI 社区的最新动态，都可以从这份列表里挑选合适的内容。如果你对某个具体的论文想了解更多细节，或者想讨论背后的实现细节，随时可以在评论区留言，我会尽力提供一些自己的实战经验和思考。祝大家阅读愉快，面试顺利，代码写得开心！
+
+======================================================================
+【描述】
+大家好，我是一名资深 AI 开发者。最近在社区里，2025 上半年 LLM 论文合集热度飙升，尤其是围绕推理、强化学习和高效训练的技术。如果你想紧跟前沿、在面试或项目中抢占先机，这份资料绝对值得一看。
+
+我把这些论文按主题拆成了六大类：Reasoning Models、Reinforcement‑Learning Methods、Efficient Training & Architectures、Diffusion‑Based LLMs、Multimodal & Vision‑Language、Data & Pre‑training Datasets。每类再细分出训练、推理时、评估等子方向，帮助你快速定位感兴趣的研究点。
+
+最实用的点在于，我把每篇论文标注了 arXiv 编号、发布时间，并挑出 5–6 篇必读论文，配上简要点评。无论是想了解 Process Reward、Chain‑of‑Thought 还是 Diffusion 生成方式，都能在一眼之内拿到关键信息，省去你在海量 paper 中盲目搜索的时间。
+
+这份列表的亮点在于结构清晰、更新节奏是半年一次，适合夏季复盘和面试冲刺；但它的局限是只覆盖了公开的 arXiv 论文，缺少企业内部的技术报告。总的来说，它是一个快速捕捉 LLM 前沿的指南，而不是完整的教科书，需要结合实战代码来验证效果。
+
+如果你想把这些前沿知识直接落地到项目里，不妨在评论里告诉我你最想深入的主题，我会在后续文章中给出实战案例和代码片段。现在就点进来，下载完整的 200+ 论文清单，开启你的夏季技术学习之旅吧！
+
+
+#AI工具 #开发者工具 #大模型 #论文指南 #推理模型 #强化学习 #高效训练

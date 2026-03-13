@@ -7,7 +7,7 @@ const config = require('./config');
 const { SYSTEM_PROMPT, CONTENT_PROMPT, DESCRIPTION_PROMPT } = require('./prompts');
 
 const MIN_CHARS    = 600;
-const MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 6;
 const REASONING_FLUSH_SIZE = 200;
 
 function getClient() {
@@ -77,14 +77,16 @@ function extractAnswerFromReasoning(reasoning) {
  * just the answer out of the reasoning dump instead of passing the whole
  * thing to parseContent (which caused the reasoning text to become the title).
  */
-async function streamCompletion(messages, temperature = 0.7) {
+async function streamCompletion(messages, temperature = config.ai.temperature) {
   const openai = getClient();
   const stream = await openai.chat.completions.create({
     model: config.ai.model,
     messages,
     temperature,
-    top_p: 0.9,
-    max_tokens: 8192,
+    top_p: config.ai.topP,
+    max_tokens: config.ai.maxTokens,
+    ...(config.ai.reasoningBudget ? { reasoning_budget: config.ai.reasoningBudget } : {}),
+    ...(config.ai.enableThinking ? { chat_template_kwargs: { enable_thinking: true } } : {}),
     stream: true,
   });
 
@@ -137,11 +139,34 @@ async function streamCompletion(messages, temperature = 0.7) {
  * Expected format: title on line 1, blank line, body from line 3 onward.
  */
 function parseContent(raw) {
-  const lines = raw.trim().split('\n');
+  const text = raw.trim();
 
+  // ── Try JSON parse first (preferred format) ──────────────────────────────
+  // Strip optional ```json ... ``` fences the model sometimes adds
+  const jsonText = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+  const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    try {
+      const parsed = JSON.parse(jsonMatch[0]);
+      const titleLine = (parsed.title || '').trim();
+      const content   = (parsed.content || '').replace(/\\n/g, '\n').trim();
+      if (titleLine && content) {
+        const charCount = content.replace(/\s/g, '').length;
+        if (charCount < MIN_CHARS) throw new Error(`字数不足 (${charCount} 字，最少 ${MIN_CHARS} 字)`);
+        console.log(`  ✅ 标题: ${titleLine}`);
+        console.log(`  ✅ 正文: ${charCount} 字`);
+        return { title: titleLine, content };
+      }
+    } catch (jsonErr) {
+      if (jsonErr.message.includes('字数不足')) throw jsonErr;
+      console.warn('  ⚠️  JSON.parse 失败，回退到纯文本解析:', jsonErr.message);
+    }
+  }
+
+  // ── Fallback: plain-text first-line = title ───────────────────────────────
+  const lines = text.split('\n');
   let titleLine = '';
   let bodyStart = 0;
-
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (line) {
@@ -150,15 +175,11 @@ function parseContent(raw) {
       break;
     }
   }
-
   while (bodyStart < lines.length && !lines[bodyStart].trim()) bodyStart++;
-
   const content = lines.slice(bodyStart).join('\n').trim();
 
   if (!titleLine || !content) throw new Error('格式异常：无法解析标题或正文');
-
-  // Sanity check: title should be Chinese or at least short — not a reasoning sentence
-  if (titleLine.length > 60 || /^(let me|i need|first|okay|so |the model|step \d)/i.test(titleLine)) {
+  if (titleLine.length > 100 || /^(let me|i need|first|okay|so |the model|step \d)/i.test(titleLine)) {
     throw new Error('格式异常：标题看起来是推理内容而非文章标题');
   }
 
@@ -231,8 +252,15 @@ async function generateDescription(title, content) {
       if (line.startsWith('#')) {
         inDescription = false;
         hashtags += (hashtags ? ' ' : '') + line;
-      } else if (inDescription && line.trim()) {
-        description += (description ? '\n' : '') + line.trim();
+      } else if (inDescription) {
+        if (line.trim()) {
+          // Non-empty line: add it with a newline prefix if we've already started
+          description += (description ? '\n' : '') + line.trim();
+        } else if (description.length > 0) {
+          // Blank line: preserve it to maintain paragraph structure
+          // (but only if we've already started adding content)
+          description += '\n';
+        }
       }
     }
     

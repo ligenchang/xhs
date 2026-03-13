@@ -1,0 +1,30 @@
+======================================================================
+【标题】
+EasyAIConfig一键配置OpenClaw、Codex、ClaudeCode
+
+======================================================================
+【正文】
+好，先说说这个工具给我的感觉。打开仓库看到README，直接就被那句‘简单安装配置OpenClaw 龙虾 Codex ClaudeCode等工具’吸引住了。其实我之前用过不少AI编程助手，但每次都得手动改config.toml、写.env，真的挺烦的。这东西 promised 一键搞定，听起来就很舒服。
+
+核心功能其实挺多的。首先是 Provider 管理，你只需要填入 Base URL 和 API Key，它会自动写进 config.toml 还有 .env，省掉了手敲的麻烦。接下来是模型检测，程序会帮你扫出来可用的模型列表，还会推荐最新的版本，省去你自己去查文档的时间。切换 Provider 的时候，它会把多个配置保存下来，随时切换，感觉像是多tab浏览器一样方便。配置编辑器是可视化的表单，但也支持直接编辑原始的 TOML，要是你想手动改点啥，完全没问题。每次保存前会自动备份，出错还能一键回滚，这种安全感挺nice的。桌面客户端是基于 Tauri 开发的，跑在 macOS、Windows、Linux 上都挺顺畅的，主题还能在深色和浅色之间切换，眼睛累的时候切换一下挺舒服。
+
+安装部分挺直接的。桌面版推荐直接去 Releases 里面下对应平台的包，macOS 是 .dmg，Windows 是 .msi/.exe，Linux 则是 .AppImage/.deb。如果你更喜欢Web模式，只要装好 Node.js，全局装 easyaiconfig，然后敲个 easyaiconfig 就能启动本地服务并自动打开浏览器。快速开始的步骤也挺清晰：输入 Base URL（支持 OpenAI 以及兼容的第三方），填写 API Key，检测模型，保存配置，写入 ~/.codex/config.toml + .env (配置文)，最后在终端里跑配置好的 Codex。整个流程大概五分钟就能完成，挺适合想快速上手的同学。
+
+如果你想动手开发，前置条件挺明确的：Node.js ≥ 18，Rust ≥ 1.77（因为桌面端是用 Rust写的），npm ≥ 8。Web模式只要 npm install 然后 npm start，桌面开发则是 npm install 再跑 npm run desktop:dev，打包则是 npm run desktop:build。项目结构也挺清晰，public里放前端静态文件，src负责后端和核心库，src-tauri是桌面端的源码，里面有 lib.rs、config.rs、provider.rs这些文件。发布的时候需要生成签名密钥，用 npx tauri signer generate -w ~/.tauri/easyaiconfig.key，然后在 GitHub Secrets里配置私钥、密码还有用 GitHub CLI 写入的命令，这样 CI 就会自动签名并发布。发布新版本只要打个 tag，推送过去就能触发自动构建，挺省事的。License 是 MIT 的，开源许可没问题。
+
+总的来说，EasyAIConfig 真的是把很多繁琐的配置步骤自动化了，尤其是对那些经常切换模型、切换 API 关键点的同学来说，省下的时间可以拿去写业务代码。虽然我自己在使用过程中遇到过一点小问题——比如有时候模型检测不太全，需要手动刷新一下——但整体体验还是不错的。嗯，如果你正在找一个统一管理 AI 编程工具配置的利器，不妨去 GitHub 上搜搜 lmk1010/EasyAIConfig，下下来试试看，感觉会比手动改文件舒服很多。
+
+======================================================================
+【描述】
+最近在 GitHub 上看到一个叫 EasyAIConfig 的开源项目，它把 OpenClaw、Codex、ClaudeCode 等常用 AI 编程助手的配置全都自动化，一键搞定，真的很省事。
+
+核心功能包括 Provider 管理、模型自动检测、可视化编辑器以及多配置切换。只要填入 Base URL 与 API Key，程序会把它们写进 config.toml 和 .env，还会自动备份、支持一键回滚。桌面客户端基于 Tauri，支持 macOS、Windows、Linux，主题还能在暗黑/浅色间切换，使用体验相当流畅。
+
+安装方式也很简单：桌面版直接下载对应平台的 Release 包，Web 版只需装好 Node.js 后全局 npm i easyaiconfig 启动即可。整个流程大约五分钟，适合想快速上手的开发者，尤其是需要频繁切换不同模型或 API 关键点的同学。
+
+从实用角度看，它把手动敲 config.toml、编辑 .env 的繁琐步骤全抛掉，省下的时间可以专注于业务逻辑；但模型检测有时会漏掉新发布的版本，需要手动刷新。整体来说，它是一款把配置细节抽象化的利器，符合当下 AI 工具链自动化的趋势。
+
+如果你也在寻找统一管理 AI 编程助手的办法，不妨去 GitHub 上搜索 lmk1010/EasyAIConfig，下载试用后在评论里分享你的使用感受，看看它能否帮你省下多少配置时间。
+
+
+#AI工具 #开发者工具 #大模型 #编程效率 #自动化 #开源项目 #配置管理

@@ -1,0 +1,36 @@
+======================================================================
+【标题】
+Showboat Chartroom 实战指南
+
+======================================================================
+【正文】
+嘿，最近玩了点 Showboat 的新功能，顺手写点记录。感觉这两天的更新真是把开发效率推到新高度，尤其是那两个小工具 Chartroom 和 datasette-showboat，真的挺有意思的。
+
+Showboat 0.6.0 加了个叫 remote 的特性，虽然对普通用户来说有点隐形，但其实全靠环境变量配置。比如你可以在 shell 里 export SHOWBOAT_REMOTE_URL=https://www.example.com/submit?token=xyz，这样每次提交的文档都会自动推送到指定的地址。这样一来，Claude 实例在写文档的时候就能直接把结果推送过去，不用等手动 git commit 那种笨办法。
+
+Chartroom 就是个专门给 Showboat 设计的 CLI 绘图工具，写完文档后只要执行 chartroom 命令就能把表格、调用统计之类的图直接生成出来。它的好处是不需要额外装图表库，只要装了 Chartroom，就能在 Markdown 里嵌入图片而不破坏排版。我自己在写 uvx showboat --help 的时候，就用 Chartroom 把返回的帮助文档画成柱状图，一眼就能看出哪些选项最常用。
+
+datasette-showboat 则是把 Showboat 的远程发布功能对接到 Datasette 的插件。它的核心是把每次生成的 Markdown 文档当成一条记录，incrementaly push 到本地或远程的 Datasette 实例。这样一来，你的文档历史会以数据库的形式保存，后续想查看某次实验的输出时，只要打开 Datasette 就能直接检索。我之前在实验 SQLite-chronicle 和 sqlite-history-json 的对比时，就把生成的对比表直接塞进 datasette-showboat，结果可以用 SQL 语句随意过滤，挺爽的。
+
+平时我一般在 Claude Code 里敲 uvx showboat --help 来让它生成文档，然后让它把 screenshots 之类的截图也一起带上。生成完之后，我得等它提交到 GitHub 分支，才能在网页上看到最终效果。这个等待过程挺煎熬的，尤其是刚调试完代码想马上看到结果的时候。于是我就想搞个自己的远程提交服务器，让 Claude 实例能直接把文档推送过去，省得每次都等 git push。正好 Showboat 那套 remote 机制正好可以直接拿来用，省去自己写 HTTP 接口的麻烦。
+
+配置起来也很简单，只要在机器上设置 export SHOWBOAT_REMOTE_URL=https://myserver.example.com/submit?token=abc123，然后在代码里写好对应的提交逻辑，Claude 就能在每次生成文档后自动把内容 POST 过去。这里有个小坑是 token 必须是唯一的，否则会覆盖之前的记录。我一开始把 token 写成固定的 test，结果发现每次提交都会把旧的文档给覆盖，后来才改成用时间戳加随机串的方式，才真正实现增量推送。
+
+Chartroom 的源码我在 GitHub 上看到是用 Python 写的，作者把绘图逻辑封装成了一个小库，调用时只要传个 JSON 数据就能得到图表。作者还写了个 How I built Chartroom 的小文档，里面提到用了 Plotly 的离线模式，生成的 SVG 直接嵌入 Markdown，这样在 GitHub 的渲染页面上也能直接显示。这个细节对我挺重要，因为我经常在没有网络的环境下写文档，离线生成的 SVG 就能保证不依赖外部资源。
+
+总的来说，Showboat 的生态在短短几周里已经从一个单纯的文档生成工具，变成了可以和各种其它工具衔接的桥梁。Chartroom 让文档里的数据可视化变得毫不费力，而 datasette-showboat 则把生成的文档变成了可以查询的数据库记录。如果你已经在用 Showboat，强烈建议你试试这两个新工具，尤其是想要把实验结果自动记录下来的情况下，真的能省下不少时间。
+
+======================================================================
+【描述】
+最近 Showboat 0.6.0 更新加入了 remote 特性，配合 Chartroom 与 datasette-showboat 两大新组件，让文档生成和实验记录变得前所未有地顺畅。如果你是用 Showboat 的开发者，这背后的技术细节值得深入探讨。
+
+Showboat 的 remote 能通过环境变量把生成的文档自动 POST 到自定义服务器；Chartroom 直接在 Markdown 中绘制 SVG 表格图；datasette-showboat 则把每次输出当作数据库记录，支持增量查询。这些功能把文档、图表和实验数据统一管理，显著提升工作流效率。
+
+对我们而言，最大的价值在于不再需要手动 git commit 与本地图表生成，只要设置 SHOWBOAT_REMOTE_URL 即可实现自动推送；在无网络环境下也能离线渲染 SVG；通过 SQL 方式检索历史实验结果，省时省力。
+
+亮点在于把文档、图表、数据三者无缝衔接，缺点是需要自行搭建 remote 服务器并注意 token 唯一性；从趋势看，文档生成正向数据驱动的方向已经成形，未来可能会与 CI/CD 深度集成。
+
+如果你也在使用 Showboat，强烈建议尝试这两个新工具，并分享你的使用感受。想了解具体配置细节或遇到问题，欢迎在评论区交流，我会一起探讨最佳实践。
+
+
+#Showboat #开发效率 #文档生成 #数据可视化 #实验记录 #CLI工具 #AI开发

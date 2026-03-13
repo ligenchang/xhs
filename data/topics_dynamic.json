@@ -1,237 +1,157 @@
 {
   "topics": [
     {
-      "name": "Qwen3.5-35B-A3B",
-      "addedAt": 1772678604819
+      "name": "Flux2-Klein-Face-Swap",
+      "addedAt": 1773297434240
+    },
+    {
+      "name": "BitNet",
+      "addedAt": 1773307887812
+    },
+    {
+      "name": "Free-Unlimited-Google-Veo-3",
+      "addedAt": 1773309404658
+    },
+    {
+      "name": "NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4",
+      "addedAt": 1773319474710
+    },
+    {
+      "name": "LeCun",
+      "addedAt": 1773319474710
     },
     {
       "name": "Qwen3.5-9B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-35B-A3B-GGUF",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-27B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-0.8B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-4B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-397B-A17B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-9B-GGUF",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "MiniMax-M2.5",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Nanbeige4.1-3B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Huihui-Qwen3.5-35B-A3B-abliterated",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "GLM-5",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-122B-A10B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-27B-GGUF",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-2B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "LFM2-24B-A2B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "pplx-embed-v1-0.6b",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "DeepSeek-R1",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Kimi-K2.5",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "LocoOperator-4B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-27B-FP8",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-35B-A3B-FP8",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Huihui-Qwen3.5-27B-abliterated",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-4B-GGUF",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5-122B-A10B-GGUF",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "FireRed-OCR",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3-Coder-Next",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Omni-Video-Factory",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "qwen-image-multiple-angles-3d-camera",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "wan2-2-fp8da-aoti-preview",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Z-Image-Turbo",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "faster-qwen3-tts-demo",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3-TTS",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "FireRed-Image-Edit-1.0-Fast",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Omni-Image-Editor",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen-Image-Edit-2511-LoRAs-Fast",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "TRELLIS.2",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Wan2.2-Animate",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "LFM2.5-1.2B-Thinking-WebGPU",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "FLUX.2-klein-9B",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "wan2-2-fp8da-aoti-preview2",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "OmniLottie",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Flux2-Klein-Face-Swap",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen-Image-Edit-Angles",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Qwen3.5",
-      "addedAt": 1772678604819
-    },
-    {
-      "name": "Ryzen AI",
-      "addedAt": 1772699968714
-    },
-    {
-      "name": "Step-3.5-Flash-Base",
-      "addedAt": 1772701773404
-    },
-    {
-      "name": "Phi-4-reasoning-vision-15B",
-      "addedAt": 1772720017740
-    },
-    {
-      "name": "GPT-5.4",
-      "addedAt": 1772735106009
-    },
-    {
-      "name": "PageAgent",
-      "addedAt": 1772746918583
-    },
-    {
-      "name": "Crow-9B-Opus-4.6-Distill-Heretic_Qwen3.5",
-      "addedAt": 1772807113081
-    },
-    {
-      "name": "Qwen3.5-0.8B-GGUF",
-      "addedAt": 1772827579373
+      "addedAt": 1773325057435
     },
     {
       "name": "sarvam-105b",
-      "addedAt": 1772833648231
+      "addedAt": 1773325057435
     },
     {
       "name": "sarvam-30b",
-      "addedAt": 1772862729338
+      "addedAt": 1773325057435
     },
     {
-      "name": "Anthropic AI",
-      "addedAt": 1772894465560
+      "name": "Qwen3.5-9B-GGUF",
+      "addedAt": 1773325057435
     },
     {
-      "name": "all-bench-leaderboard",
-      "addedAt": 1772902471289
+      "name": "Qwen3.5-35B-A3B",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Qwen3.5-35B-A3B-GGUF",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Crow-9B-Opus-4.6-Distill-Heretic_Qwen3.5",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Qwen3.5-0.8B",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Qwen3.5-4B",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Phi-4-reasoning-vision-15B",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "MiniMax-M2.5",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Qwen3.5-27B",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Omni-Video-Factory",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "wan2-2-fp8da-aoti-preview",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "FireRed-Image-Edit-1.0-Fast",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Qwen-Image-Edit-2511-LoRAs-Fast",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "qwen-image-multiple-angles-3d-camera",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Z-Image-Turbo",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Omni-Image-Editor",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "TRELLIS.2",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Qwen3-TTS",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "faster-qwen3-tts-demo",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "Wan2.2-Animate",
+      "addedAt": 1773325057435
+    },
+    {
+      "name": "LTX-2-3",
+      "addedAt": 1773326408388
+    },
+    {
+      "name": "McKinsey",
+      "addedAt": 1773328721545
+    },
+    {
+      "name": "s2-pro",
+      "addedAt": 1773332945294
+    },
+    {
+      "name": "NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
+      "addedAt": 1773332945294
+    },
+    {
+      "name": "ltx-2-TURBO",
+      "addedAt": 1773338070611
     },
     {
       "name": "UGI-Leaderboard",
-      "addedAt": 1772903912961
+      "addedAt": 1773340953784
     },
     {
-      "name": "nano-banana",
-      "addedAt": 1772927696837
+      "name": "smol-worldcup",
+      "addedAt": 1773354342649
+    },
+    {
+      "name": "Behind AI",
+      "addedAt": 1773359832198
+    },
+    {
+      "name": "NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+      "addedAt": 1773361636032
+    },
+    {
+      "name": "IonRouter",
+      "addedAt": 1773371368316
     }
   ],
-  "updatedAt": "2026-03-07T23:54:56.837Z"
+  "updatedAt": "2026-03-13T03:09:28.316Z"
 }

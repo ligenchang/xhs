@@ -113,20 +113,6 @@ const FEEDS = [
     type: 'researcher',
     weight: 4,
   },
-  {
-    name: 'Dev.to AI',
-    url: 'https://dev.to/api/articles?tag=ai&per_page=50',
-    tier: 1.8,
-    type: 'tool-launch',
-    weight: 3,
-  },
-  {
-    name: 'Papers with Code',
-    url: 'https://paperswithcode.com/latest',
-    tier: 1.8,
-    type: 'aggregator',
-    weight: 3,
-  },
 
   // ── Tier 2: Engineering Media ──────────────
   {
@@ -136,15 +122,6 @@ const FEEDS = [
     type: 'engineering',
     weight: 3,
   },
-  {
-    name: 'Ars Technica AI',
-    url: 'https://feeds.arstechnica.com/arstechnica/technology-lab',
-    tier: 2,
-    type: 'engineering',
-    weight: 3,
-  },
-
-  // ── Tier 3: General Media ──────────────────
   {
     name: 'TechCrunch AI',
     url: 'https://techcrunch.com/category/artificial-intelligence/feed/',
@@ -242,11 +219,15 @@ function parseRss(xml, source) {
     const urlMatch = linkRe.exec(block);
     const url      = (urlMatch?.[1] || urlMatch?.[2] || '').trim();
 
-    if (!title || !desc) continue;
-
-    // Apply AI filter to general aggregators and tool-launch feeds
-    if ((source.type === 'media' || source.type === 'aggregator' || source.type === 'tool-launch') 
-        && !isAiRelevant(`${title} ${desc}`)) continue;
+    // Title is required; description is optional for trusted sources (labs, researchers)
+    if (!title) continue;
+    
+    // For official labs/researchers, accept even without description
+    // For media/aggregators, require description and pass AI filter
+    if (source.type === 'media' || source.type === 'aggregator' || source.type === 'tool-launch') {
+      if (!desc) continue; // Media sources must have description
+      if (!isAiRelevant(`${title} ${desc}`)) continue; // Apply AI filter to media
+    }
 
     items.push({
       id: generateId(title, url),
@@ -313,7 +294,9 @@ async function fetchAllRss() {
     FEEDS.map(async (source) => {
       try {
         const xml   = await fetchUrl(source.url, 12000);
-        const items = parseRss(xml, source);
+        let items = parseRss(xml, source);
+        // Cap items per source to prevent pool overflow
+        items = items.slice(0, 25);
         console.log(`  ✓ ${source.name}: ${items.length} items`);
         results.push(...items);
       } catch (err) {

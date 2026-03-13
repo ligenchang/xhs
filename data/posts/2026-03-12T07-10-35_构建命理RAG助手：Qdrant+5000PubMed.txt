@@ -1,0 +1,38 @@
+======================================================================
+【标题】
+构建命理RAG助手：Qdrant+5000PubMed
+
+======================================================================
+【正文】
+最近在研究 longevity 领域，发现每天都有上百篇关于 rapamycin、NAD+、senescence 的论文冲进 PubMed。不过要是想把这些文献变成自己能直接查的知识库，光是消化的时间就够呛。于是我们想搭一个自己的 RAG 系统，专门处理医学文献。
+
+这里要讲的是混合检索的思路。单纯的向量检索虽然能捕捉语义，但像 APOE3 与 APOE4 这种只差一个字母的基因标记，向量模型往往会把它们当成相近的概念，导致检索结果出错。于是我们把密集检索和稀疏检索结合起来，既能利用 BGE‑m3 这种多语言强大的嵌入，又能保证关键词的精准匹配。
+
+整个流程大致是这样的：先把 PubMed 的 PDF 或 XML 拆成若干段落，用 unstructured.io 把多列布局、表格这些麻烦的结构给拆开；然后把每段落送进 BGE‑m3，得到 dense 向量和 sparse 向量；这两类向量都存进 Qdrant 的同一个 collection，最后用户的查询在 hybrid search 里同时匹配 dense 与 sparse，取前几条最相关的文档，再交给大模型生成答案，最后把来源标记回去。
+
+动手之前得准备好几个环境：先用 Docker 把 Qdrant 跑起来，记得端口映射到 6333；然后装好 langchain、qdrant‑client、unstructured、sentence‑transformers 这些库；还有 FlagEmbedding 的 BGE‑m3 模型文件，下载后放到本地或者直接调用 HuggingFace。
+
+第一步是把医学论文转成干净的文字。Unstructured 的 partition_pdf 参数里，strategy 设成 hi_res 能保留高分辨率的排版，extract_images 关掉，infer_table_structure 打开，这样表格里的数据也能被识别；chunking_strategy 设成 by_title 能按标题自然切分，max_characters 1500 之类的限制能防止单段太长。
+
+第二步是创建 Qdrant collection。size 设成 1024，因为 BGE‑m3 的 dense 维度是 1024，distance 用 COSINE；再加一个叫 text‑sparse 的 sparse 配置，打开 on_disk，这样稀疏向量也能保存。创建完后，就可以把每段的向量一次次上传，字段里记得带上 payload，比如论文标题、来源、章节编号之类的元信息。
+
+第三步是生成混合向量。用 FlagEmbedding 的模型，调用 get_text_embedding，它会一次性返回 dense 向量、sparse 向量以及其它多向量；把 dense 部分直接喂给 Qdrant，sparse 部分则放进对应的 sparse 配置里。这里有个细节是要把向量归一化，否则相似度排序会偏向数值大的向量。
+
+实际运行时会碰到几个常见坑：一是 PDF 质量差导致文字识别错误，二是某些特殊字符（比如希腊字母）在编码时会出错，三是检索返回的文档太多时需要调节 top_k，通常 5~10 条比较合适。遇到这些问题可以先打印出 chunk 的原始文本，看看有没有漏掉的段落，或者手动把出问题的文件剔除。
+
+总的来说，这种混合检索的思路在医学文献里挺好用的，尤其是当你需要同时兼顾语义理解和精确匹配时。搭好后，你可以把它挂在自己的笔记本上，随时查最新的 longevity 研究，甚至可以配合 LangChain 的 prompt 模板，让大模型直接给出结论并标注来源。如果你对 bio‑informatics 或者 AI 在医学的结合感兴趣，不妨自己动手试试，后面还有很多高级模式等着探索。
+
+======================================================================
+【描述】
+最近在 longevity 领域刷屏的 rapamycin、NAD+、senescence 论文每天上百篇，怎么快速把它们变成可查的知识库？我们用 Qdrant+5000PubMed 搭建了一个专属的 RAG 助手，直接把医学文献变成可搜索的向量库。
+
+混合检索的关键在于把稀疏和密集向量一起存进同一个 Qdrant collection。我们用 unstructured 拆分 PDF、BGE‑m3 生成 dense 与 sparse 向量，再通过 hybrid search 同时匹配语义和关键词，确保像 APOE3/APOE4 这种微小差异也能精准命中。
+
+整个流程只需要 Docker 启动 Qdrant，装好 langchain、qdrant‑client、unstructured 等库，下载 BGE‑m3 模型即可。上传向量时把标题、来源、章节号等信息写进 payload，查询时返回的文档会自动带上来源引用，直接喂给大模型生成答案。
+
+这种方式在医学文献里尤为有用，因为既要捕捉概念的语义关联，又必须保证关键词的准确匹配。局限在于 PDF 质量差或特殊字符编码错误，需要一定的预处理成本，但一旦搭建成功，就能随时追踪最新的 longevity 研究。
+
+如果你也在做 bio‑informatics 或 AI 医疗项目，不妨动手试试这个混合检索方案，遇到任何问题可以在评论里提出，我会一起讨论解决。
+
+
+#AI工具 #开发者工具 #大模型 #RAG #医学文献 #混合检索 #LangChain

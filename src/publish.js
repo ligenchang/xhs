@@ -2,10 +2,39 @@
  * publish: fetch news bundle → generate post → publish to Xiaohongshu.
  */
 
+const fs = require('fs');
+const path = require('path');
 const { findBestStory } = require('./news');
-const { generatePost, generateDescription }  = require('./generator');
+const { generatePost, generateDescription } = require('./generator');
 const XhsBrowser        = require('./browser');
 const { hashText, save: saveHash } = require('./store');
+
+function saveGeneratedPost(title, content, description) {
+  const dir = path.resolve('./data/posts');
+  fs.mkdirSync(dir, { recursive: true });
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  const safeName  = title.slice(0, 30).replace(/[\/\\:*?"<>|]/g, '_');
+  const filename  = `${timestamp}_${safeName}.txt`;
+
+  const fileContent = [
+    '='.repeat(70),
+    '【标题】',
+    title,
+    '',
+    '='.repeat(70),
+    '【正文】',
+    content,
+    '',
+    '='.repeat(70),
+    '【描述】',
+    description,
+    '',
+  ].join('\n');
+
+  fs.writeFileSync(path.join(dir, filename), fileContent, 'utf-8');
+  console.log(`  💾 文章已保存: data/posts/${filename}`);
+}
 
 async function publish() {
   console.log('📊 Starting publish pipeline...\n');
@@ -23,7 +52,7 @@ async function publish() {
   const { title, content } = await generatePost(bundle);
 
   console.log('\n' + '='.repeat(70));
-  console.log('✨ GENERATED POST');
+  console.log('📝 GENERATED POST');
   console.log('='.repeat(70));
   console.log(`\n【标题】\n${title}`);
   console.log(`\n【正文】\n${content}`);
@@ -38,13 +67,16 @@ async function publish() {
   console.log(`\n【正文描述】\n${description}`);
   console.log('\n' + '='.repeat(70) + '\n');
 
+  // Save generated post to local file
+  saveGeneratedPost(title, content, description);
+
   // 3. Open browser and publish
   const browser = new XhsBrowser();
   
   try {
     await browser.init();
     await browser.loadCookies();
-    // await browser.ensureLoggedIn();
+    await browser.ensureLoggedIn();
     await browser.navigateToEditor();
     await browser.fillTitle(title);
     await browser.page.waitForTimeout(500);

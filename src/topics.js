@@ -11,7 +11,7 @@ const fs   = require('fs');
 const path = require('path');
 
 const DYNAMIC_FILE = path.resolve('./data/topics_dynamic.json');
-const TOPIC_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const TOPIC_TTL_MS = 24 * 60 * 60 * 1000;  // 1 day TTL
 const MAX_DYNAMIC  = 500;  // Increased from 200 to allow more discovered topics
 
 
@@ -115,7 +115,16 @@ function loadDynamic() {
     if (fs.existsSync(DYNAMIC_FILE)) {
       const data = JSON.parse(fs.readFileSync(DYNAMIC_FILE, 'utf-8'));
       const now  = Date.now();
-      return (data.topics || []).filter((t) => now - (t.addedAt || 0) < TOPIC_TTL_MS);
+      const filtered = (data.topics || []).filter((t) => now - (t.addedAt || 0) < TOPIC_TTL_MS);
+      
+      // If we removed expired topics, save back the cleaned file
+      if (filtered.length < (data.topics || []).length) {
+        const removed = (data.topics || []).length - filtered.length;
+        console.log(`  🗑️  Expired ${removed} stale topics (>1 day old), keeping ${filtered.length} fresh ones`);
+        saveDynamic(filtered);
+      }
+      
+      return filtered;
     }
   } catch (_) {}
   return [];
@@ -153,7 +162,9 @@ function addDiscoveredTopics(names) {
   if (newEntries.length > 0) {
     const merged = [...existing, ...newEntries].slice(-MAX_DYNAMIC);
     saveDynamic(merged);
-    console.log(`  💡 Added ${newEntries.length} dynamic topics: ${newEntries.slice(0, 5).map((t) => t.name).join(', ')}${newEntries.length > 5 ? '...' : ''}`);
+    console.log(`  💡 Dynamic topics updated: +${newEntries.length} new, ${merged.length} total active, file refreshed`);
+  } else if (existing.length > 0) {
+    console.log(`  ✓ Dynamic topics: ${existing.length} active from previous runs`);
   }
 }
 

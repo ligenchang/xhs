@@ -18,7 +18,12 @@ const config = {
   ai: {
     apiKey: requireEnv('NVIDIA_API_KEY'),
     baseURL: 'https://integrate.api.nvidia.com/v1',
-    model: 'nvidia/nemotron-3-nano-30b-a3b',
+    model: 'nvidia/nemotron-3-super-120b-a12b',
+    temperature: 1,
+    topP: 0.95,
+    maxTokens: 16384,
+    reasoningBudget: 16384,
+    enableThinking: false,
   },
   browser: {
     headless: false,
@@ -33,8 +38,11 @@ const config = {
   publishedFile: './data/published_news.json',
   scheduler: {
     minIntervalMs: 10 * 60 * 1000,
-    maxIntervalMs: 25 * 60 * 1000,
+    maxIntervalMs: 30 * 60 * 1000,
   },
+  // Optional topic focus: only fetch/score items matching this keyword.
+  // Set via FOCUS_TOPIC env var or `node index.js topic <keyword>`.
+  focusTopic: process.env.FOCUS_TOPIC || '',
 };
 
 module.exports = config;

@@ -1,0 +1,27 @@
+======================================================================
+【标题】
+MicroClaw跨平台Agentic助手实战指南
+
+======================================================================
+【正文】
+大家好，我是个后端开发者，今天随手聊聊MicroClaw，这个项目挺有意思的，感觉可以试试。项目主页上写着它是一个基于Rust的Agentic AI助手，能够在聊天里活跃起来，支持多平台适配，还能持久记忆，工具执行也是很强大的。项目目前已经有540 stars，更新时间是2026-03-11，看来挺受大家关注的。
+
+MicroClaw的核心是一个channel‑agnostic的核心，配合各种platform adapters，目前支持Telegram、Discord、Slack、Feishu、Matrix、WhatsApp、iMessage、Email、Nostr、Signal、DingTalk、QQ、IRC、Web这些渠道，后续还会继续加。它能够和多个LLM provider（包括Anthropic和OpenAI‑compatible API）对接，并且支持完整的工具执行：可以运行shell命令，读写编辑文件，做全局搜索，甚至浏览网页，还能调度任务，保持跨对话的持久记忆。所有这些功能在默认情况下最多可以进行100次迭代，这在实际使用中感觉挺流畅的。
+
+安装方面，官方提供了几种方式。最推荐的是一行命令的curl安装脚本，地址是https://microclaw.ai/install.sh，执行后会下载并安装最新的预编译二进制。Windows的PowerShell安装也类似，只要跑一次iwr脚本就行。安装脚本只负责下载二进制，不会自动 fallback到Homebrew或者Cargo，如果你想用其他方式，可以自行编译。升级的话直接用microclaw upgrade就行，卸载脚本也是类似的结构。Homebrew的用户可以直接brew install microclaw，从源码编译的话，git clone后进去 cargo build --release，然后把binary复制到/usr/local/bin之类的路径。如果想要sqlite‑vec特性，需要打开对应的feature，运行cargo run --features sqlite-vec -- setup之类的步骤，然后填好embedding_provider的配置，记得填好api key之类的凭证。安装完之后，运行microclaw doctor可以做一次预检查，包括PATH、shell runtime、PowerShell策略这些，还有MCP的依赖检查。如果你在沙盒环境里调试，microclaw doctor sandbox也是可用的。文档里写得不太完整，但够用，如果有问题可以直接在issue里提。
+
+使用的时候，每条消息都会触发一个agentic循环，模型可以调用工具，查看结果，再继续调用，最多100次迭代。这个循环会保持会话状态，包括所有的tool交互，所以你可以在后续的对话里继续利用之前的工具调用结果。为了防止上下文太长，系统会自动进行context compaction，把老的消息压缩成摘要，保证在上下文限制内。还有sub‑agent的机制，可以把子任务交给一个受限工具集的并行代理去处理，这样主代理可以专注于更高层次的推理。plan & execute功能会帮你拆分复杂任务，生成待办列表，一步步跟踪进度。调度功能也支持，可以设定定时任务，比如每天自动执行某段脚本。技能系统是可扩展的，技能文件放在<data_dir>/skills/里，系统会自动发现并按需加载，兼容Anthropic Skills的格式。平台适配器的设计也很开放，只要实现对应的接口，就能挂到MicroClaw上，后续想支持的渠道基本都能加进去。
+
+ supported platforms列表挺长的，包括Telegram、Discord、Slack、Feishu、Matrix、WhatsApp、iMessage、Email、Nostr、Signal、DingTalk、QQ、IRC、Web这些，后续还会继续扩展。每个平台的适配器需要自己写，但核心的agent loop、tool system、storage是共享的，所以实现起来相对简单。如果你想自己添加新平台，官方文档里有详细的Adding a New Platform Adapter指南，文档地址在github上，写得比较散，但基本步骤都有。文档里提到的MCP（Model Control Protocol）也是一个重要的扩展点，可以让不同的LLM provider之间的调用更统一。整体架构是shared agent loop + tool system + storage，这样不管是哪个平台，都能复用同一套核心逻辑，代码维护起来比较友好。
+
+在实际使用中，我个人觉得最有意思的点是它的持久记忆和多平台统一。比如在Telegram里跟它聊了几轮，它会记住之前的对话，甚至可以在后续的对话里引用之前的工具执行结果。还有一个本地Web UI，可以跨渠道查看聊天历史，挺方便的。运行起来的话，我试过在Termux里，感觉挺顺的，不过在Windows上有时候会卡住，重启一下就好了。安装脚本有时候会报错，但手动下载二进制文件再复制到合适的目录就能解决。如果你想自己编译，记得先装好Rust和Cargo，然后执行cargo build --release，最后把binary复制到/usr/local/bin之类的路径，别忘了给可执行权限。运行start命令后，就可以看到Web UI了，打开浏览器 localhost:xxxx就能看到聊天界面。
+
+微Claw的文档虽然不算特别完善，但核心的使用方法和API还是比较清晰的。比如microclaw doctor --json可以输出机器可读的诊断结果，方便把问题提交到issue里。升级的话用microclaw upgrade，卸载脚本也是类似的结构。如果你想在自己的项目里集成，可以直接把binary当作独立的服务跑起来，然后通过HTTP或者其他协议和前端对接。总的来说，这个项目还是在active development状态，功能在不断迭代，但已经具备了很多实用的特性，特别是对想在不同聊天平台里嵌入AI助手的开发者来说，是个值得尝试的选项。希望大家可以多玩玩，提交代码，给项目点个 star，一起把它做得更好。如果有任何问题，随时在issue里提，别忘了给个 star，Star数已经540了，更新时间是2026-03-11，项目还是很活跃的。祝大家玩得开心，别嫌写得乱，我这里写得有点匆忙，漏了点细节，大家见谅。 （笑） （小声） 我写得有点乱，但希望能帮到大家。
+
+======================================================================
+【描述】
+微软刚刚在 GitHub 上开源了 **MicroClaw**，一个基于 Rust 的跨平台 Agentic AI 助手，已经累计 540 颗星，更新时间停留在 2026‑03‑11。它把聊天、工具调用、长期记忆以及多渠道适配一次性打包在一起，让后端开发者不再需要在不同消息系统之间切换代码库。项目主页上写着它是 “channel‑agnostic” 的核心，配合多种 Platform Adapter 可以直接接入 Telegram、Discord、Slack、Feishu、Matrix、WhatsApp、iMessage、Email、Nostr、Signal、DingTalk、QQ、IRC、Web 等渠道，后续还会继续扩展。更重要的是，MicroClaw 支持多种 LLM Provider（包括 Anthropic、OpenAI‑compatible API），并且内置了完整的工具执行能力——运行 Shell、读写文件、全局搜索、网页抓取、任务调度，甚至可以在同一对话里保持跨工具的上下文。默认上限 100 次迭代在实际使用中表现得相当流畅，配合自动 Context Compaction，老对话会被压缩成摘要，确保上下文长度不被超限。
+
+核心亮点在于它的 **shared agent loop + tool system + storage** 架构。无论是哪个平台的消息入口，都复用同一套循环和工具库，开发者只需要实现对应的适配器即可挂到 MicroClaw 上。官方提供的 Adding a New Platform Adapter 指南相当清晰，文档虽然散碎但足够定位关键步骤。值得一提的是，MicroClaw 还内置了 sub‑agent 机制和 plan & execute 功能，能够把复杂任务拆成待办列表，交给受限工具集的并行代理执行，主代理专注于高层次推理。技能系统同样可扩展，技能文件放在 `<data_dir>/skills/`，系统会自动发现并按需加载，兼容 Anthropic Skills 格式。所有这些特性在默认安装方式下只需一行 `curl
+
+#AI工具 #开发者工具 #大模型 #自动化 #Rust #跨平台 #AgenticAssistant

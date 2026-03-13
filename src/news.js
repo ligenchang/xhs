@@ -17,87 +17,98 @@ const { fetchAllRss }        = require('./sources/rss');
 const { fetchHackerNews }    = require('./sources/hackernews');
 const { fetchArxiv }         = require('./sources/arxiv');
 const { fetchHuggingFace }   = require('./sources/huggingface');
+const { fetchWebCrawlerNews } = require('./sources/web-crawler');
+const { fetchGitHubTrending } = require('./sources/github-trending');
+const { fetchDevTo }         = require('./sources/devto');
+const { fetchLobsters }      = require('./sources/lobsters');
+const { fetchReddit }        = require('./sources/reddit');
+const { fetchProductHunt }   = require('./sources/product-hunt');
+const { fetchTopicSearch }   = require('./sources/topic-search');
 const { enrichWithArticles } = require('./sources/article');
 const { selectWithRotation } = require('./rotation');
 
 const MIN_SCORE = 5;
 
-// ─── Scoring ──────────────────────────────────────────────────────────────────
+// ─── Scoring (Quality-Based, No Keywords) ─────────────────────────────────────
 
 function scoreItem(item) {
-  const { text, pubDate, sourceTier, hnScore, hfLikes } = item;
-  const lower = text.toLowerCase();
+  const { text, pubDate, sourceTier, hnScore, hfLikes, articleText, url } = item;
 
-  // Hard filters
-  if (/^rt @/i.test(text.trim()))                                            return -99;
-  if (/follow me|click here|use code|promo|discount|affiliate/i.test(lower)) return -99;
-  if (text.replace(/\s/g, '').length < 80)                                   return -99;
-  if (/pentagon/i.test(lower))                                               return -99;  // Filter out Pentagon-related news
+  // Hard filters (quality gates, not keywords)
+  if (!text || text.replace(/\s/g, '').length < 80) return -99;  // Minimum length
+  if (/^rt @/i.test(text.trim())) return -99;  // Retweets
+  if (text.length > 5000) return -99;  // Likely spam or noise
 
   let score = 0;
 
-  // Source tier bonus
-  if (sourceTier === 1) score += 8;
-  else if (sourceTier === 2) score += 3;
+  // ─── 1. SOURCE AUTHORITY (30%) ──────────────────────────────────────────────
 
-  // HN community validation
-  if (hnScore) score += Math.min(hnScore / 20, 8);
+  // Tier-based authority
+  const sourceScore = {
+    1: 10,    // Official sources (arxiv, blogs)
+    2: 6,     // Community platforms (HN, HF)
+    3: 2,     // Social media
+  }[sourceTier] || 0;
+  
+  score += sourceScore;
 
-  // HuggingFace popularity
-  if (hfLikes) score += Math.min(hfLikes / 50, 4);
+  // Factor: Does it have a real URL/link? (Sign of credibility)
+  if (url && /^https?:\/\//.test(url)) score += 2;
 
-  // Breaking news from major labs
-  const majorLabs    = ['openai', 'anthropic', 'google deepmind', 'deepmind', 'meta ai', 'mistral', 'xai', 'deepseek', 'cohere'];
-  const majorModels  = ['gpt-5', 'gpt-4o', 'o3', 'o4', 'claude 4', 'claude 3', 'gemini 2', 'gemini 3', 'llama 4', 'grok 3', 'deepseek v3', 'phi-4', 'qwen 3'];
-  const breakingVerbs = ['release', 'launch', 'announc', 'introduc', 'unveil', 'debut', 'ship'];
+  // ─── 2. COMMUNITY SIGNALS (40%) ────────────────────────────────────────────
 
-  const labMentioned   = majorLabs.some((l) => lower.includes(l));
-  const modelMentioned = majorModels.some((m) => lower.includes(m));
-  const isBreaking     = breakingVerbs.some((v) => lower.includes(v));
+  // HN score: Real community validation
+  if (hnScore && hnScore > 0) {
+    const hnBoost = Math.min(hnScore / 15, 10);  // Cap at 10 points
+    score += hnBoost;
+  }
 
-  if ((labMentioned || modelMentioned) && isBreaking) score += 12;
-  else if (labMentioned && modelMentioned) score += 8;
+  // HuggingFace popularity: Real user engagement
+  if (hfLikes && hfLikes > 0) {
+    const hfBoost = Math.min(hfLikes / 30, 8);  // Cap at 8 points
+    score += hfBoost;
+  }
 
-  // Named AI tools (3 pts each) — cast wider net for emerging tools
-  const hotTools = [
-    'claude code', 'cursor', 'windsurf', 'devin', 'copilot', 'replit',
-    'manus', 'bolt.new', 'v0.dev', 'lovable', 'perplexity', 'chatgpt',
-    'claude', 'gemini', 'gpt-4', 'gpt-5', 'deepseek', 'llama', 'mistral',
-    'qwen', 'grok', 'ollama', 'groq', 'openrouter', 'langchain', 'crewai',
-    'langgraph', 'autogen', 'dify', 'flowise', 'n8n', 'mcp protocol',
-    // Emerging tools detection patterns
-    'launches ai', 'open source llm', 'new model', 'ai startup',
-    'open sources', 'releases new', 'introducing', 'announces', 'debuts',
-    'github trending', 'product hunt', 'ycombinator', 'y combinator',
-  ];
-  hotTools.forEach((kw) => { if (lower.includes(kw)) score += 3; });
+  // ─── 3. CONTENT QUALITY (25%) ──────────────────────────────────────────────
 
-  // Technical signals (1.5 pts each)
-  const techSignals = [
-    'benchmark', 'outperform', 'surpass', 'state-of-the-art', 'sota',
-    'context window', 'reasoning', 'agent', 'multimodal', 'fine-tun',
-    'inference', 'rag', 'retrieval', 'open-source', 'open source',
-    'new model', 'new feature', 'tokens per second', 'cost reduction',
-    'latency', 'throughput', 'speculative decoding', 'function calling',
-    'tool use', 'mcp', 'model context protocol',
-  ];
-  techSignals.forEach((kw) => { if (lower.includes(kw)) score += 1.5; });
+  // Text length indicates substance (longer = more informative, if not spam)
+  const textLength = text.length;
+  const lengthScore = Math.min(textLength / 200, 4);  // Cap at 4 points
+  score += lengthScore;
 
-  // Data richness
-  const numbers = text.match(/\d+(\.\d+)?(%|x|×| times| billion| million| trillion| tokens| ms| gb| tb)?/gi);
-  score += Math.min((numbers?.length || 0) * 1.5, 7);
-  score += Math.min(text.length / 120, 5);
+  // Information density: Numbers, metrics, data points
+  const numbers = (text.match(/\d+(?:\.\d+)?/g) || []).length;
+  const numberScore = Math.min(numbers * 0.3, 3);  // Cap at 3 points
+  score += numberScore;
 
-  // Penalties
-  if (text.length < 150)                                                       score -= 3;
-  if (/excited to announce|thrilled to share|proud to present/i.test(lower))   score -= 2;
-  if (/t\.co\/|instagram story/i.test(lower))                                   score -= 8;
+  // References to external sources (URLs in text)
+  const urlsInText = (text.match(/https?:\/\/\S+|www\.\S+/g) || []).length;
+  const urlScore = Math.min(urlsInText * 0.5, 2);  // Cap at 2 points
+  score += urlScore;
 
-  // Freshness multiplier
+  // Sentence complexity (longer average sentences = more detail)
+  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  const avgLength = sentences.length > 0 ? textLength / sentences.length : 0;
+  const complexityScore = avgLength > 50 ? 1 : 0;  // Standard technical writing
+  score += complexityScore;
+
+  // Full article available? (Indicates thorough research)
+  if (articleText && articleText.length > 200) score += 3;
+
+  // ─── 4. FRESHNESS (5%) ─────────────────────────────────────────────────────
+
   if (pubDate && !isNaN(pubDate.getTime())) {
     const ageHours = (Date.now() - pubDate.getTime()) / 3_600_000;
-    const mult = ageHours < 2 ? 1.5 : ageHours < 6 ? 1.2 : ageHours < 24 ? 1.0 : ageHours < 72 ? 0.8 : 0.6;
-    score *= mult;
+    
+    // Prefer recent, but don't penalize older quality content too much
+    let freshnessMultiplier = 1.0;
+    if (ageHours < 6) freshnessMultiplier = 1.3;
+    else if (ageHours < 24) freshnessMultiplier = 1.15;
+    else if (ageHours < 72) freshnessMultiplier = 1.0;
+    else if (ageHours < 168) freshnessMultiplier = 0.85;  // 1 week
+    else freshnessMultiplier = 0.7;  // Older content
+    
+    score *= freshnessMultiplier;
   }
 
   return score;
@@ -169,26 +180,69 @@ async function findBestStory() {
   // 1. Fetch all sources in parallel
   console.log('\n🌐 Gathering news from all sources...');
 
-  const [rssItems, hnItems, arxivItems, hfResult] = await Promise.all([
+  const [rssItems, hnItems, arxivItems, hfResult, webItems, gitHubItems, devtoItems, lobstersItems, redditItems, productHuntItems] = await Promise.all([
     fetchAllRss(),
     fetchHackerNews(50, 80),
     fetchArxiv(),
     fetchHuggingFace(),
+    fetchWebCrawlerNews(),
+    fetchGitHubTrending(),
+    fetchDevTo(),
+    fetchLobsters(),
+    fetchReddit(),
+    fetchProductHunt(),
   ]);
 
   const hfItems       = hfResult.items;
   const trendingNames = hfResult.trendingNames;
 
+  // Log source summary
+  console.log('\n📊 Source Summary:');
+  console.log(`  📰 RSS Feeds: ${rssItems.length} items`);
+  console.log(`  🔶 Hacker News: ${hnItems.length} items`);
+  console.log(`  📄 arXiv: ${arxivItems.length} items`);
+  console.log(`  🤗 HuggingFace: ${hfItems.length} items`);
+  console.log(`  🕷️  Web Crawlers: ${webItems.length} items`);
+  console.log(`  📍 GitHub Trending: ${gitHubItems.length} items`);
+
+  console.log(`  👨‍💻 Dev.to: ${devtoItems.length} items`);
+  console.log(`  🦞 Lobsters: ${lobstersItems.length} items`);
+  console.log(`  🤖 Reddit: ${redditItems.length} items`);
+  console.log(`  🚀 Product Hunt: ${productHuntItems.length} items`);
+
   // 2. Update dynamic topic pool from HF + HN discoveries
   const hnNames = hnItems.map((i) => i.title).flatMap((t) => extractTopicsFromText(t));
   addDiscoveredTopics([...trendingNames, ...hnNames]);
 
-  // 3. Fetch Twitter with full topic pool (seeds + dynamic)
-  const allTopics  = getAllTopics();
+  // 3. Fetch Twitter with full topic pool (seeds + dynamic), filtered by focus topic if set
+  const focusTopic = config.focusTopic ? config.focusTopic.toLowerCase() : '';
+  let allTopics = getAllTopics();
+  if (focusTopic) {
+    const focused = allTopics.filter((t) => t.toLowerCase().includes(focusTopic));
+    // Always search the raw focusTopic directly; supplement with pool matches if any
+    allTopics = [config.focusTopic, ...focused.filter((t) => t !== config.focusTopic)];
+    console.log(`\n🎯 Topic focus: "${config.focusTopic}" — using ${allTopics.length} matching topics for Twitter`);
+  }
   const tweetItems = await fetchTwitterTopics(allTopics, 6);
 
+  // 3b. If a focus topic is set, run targeted keyword searches for extra candidates
+  let topicSearchItems = [];
+  if (focusTopic) {
+    topicSearchItems = await fetchTopicSearch(config.focusTopic);
+    console.log(`  🎯 Topic search added ${topicSearchItems.length} extra candidates`);
+  } else {
+    // Even without a focus topic, search a few dynamic topics via arXiv+HN
+    // so newly discovered models (BitNet, etc.) get picked up every run.
+    const allTopics = getAllTopics();
+    const sample = [...allTopics].sort(() => Math.random() - 0.5).slice(0, 4);
+    console.log(`\n🔍 Auto topic search for: ${sample.join(', ')}`);
+    const extras = await Promise.all(sample.map((t) => fetchTopicSearch(t).catch(() => [])));
+    topicSearchItems = extras.flat();
+    console.log(`  ✅ Auto topic search added ${topicSearchItems.length} extra candidates`);
+  }
+
   // 4. Merge, deduplicate against published
-  const allItems = [...rssItems, ...hnItems, ...arxivItems, ...hfItems, ...tweetItems];
+  const allItems = [...rssItems, ...hnItems, ...arxivItems, ...hfItems, ...webItems, ...gitHubItems, ...devtoItems, ...lobstersItems, ...redditItems, ...productHuntItems, ...tweetItems, ...topicSearchItems];
   const fresh    = allItems.filter((item) => !publishedHashes.has(hashText(item.text)));
 
   console.log(`\n📦 Total candidates: ${allItems.length} (${fresh.length} unpublished)`);
@@ -202,50 +256,80 @@ async function findBestStory() {
     if (/follow me|click here|use code|promo|discount|affiliate/i.test(lower)) return false;
     if (item.text.replace(/\s/g, '').length < 80) return false;
     if (/pentagon/i.test(lower)) return false;
+    // Topic focus filter: keep only items whose text/title contains the keyword
+    if (focusTopic) {
+      const haystack = ((item.title || '') + ' ' + item.text).toLowerCase();
+      if (!haystack.includes(focusTopic)) return false;
+    }
     return true;
   });
 
   if (!valid.length) throw new Error('No valid candidates after basic filtering');
 
   console.log(`\n✅ Valid candidates: ${valid.length}`);
-  console.log('\n📰 Random selection from all categories:');
+  console.log('\n📰 Available articles across all sources:');
   valid.slice(0, 5).forEach((c, i) => {
     console.log(`  ${i + 1}. [${c.source}] ${c.text.slice(0, 80)}...`);
   });
 
-  // 6. Randomly select winner from valid pool
+  // 5. Randomly select from all valid candidates (no quality filtering)
+  console.log(`\n🎲 Randomly selecting from all ${valid.length} candidates...`);
   const winner = valid[Math.floor(Math.random() * valid.length)];
 
-  // 7. Enrich winner (+ a few random runners-up) with full article text
+  // 7. Enrich winner with full article text
   const toEnrich = [winner, ...valid.filter((c) => c !== winner).sort(() => Math.random() - 0.5).slice(0, 3)];
   toEnrich.forEach((c) => {
     if (!c.url && c.tcoUrls && c.tcoUrls.length > 0) c.url = c.tcoUrls[0];
   });
   await enrichWithArticles(toEnrich, toEnrich.length);
 
-  console.log(`\n🎲 Winner (randomly selected): [${winner.source}] ${winner.title || winner.text.slice(0, 80)}`);
-  if (winner.articleText) console.log(`   Full article: ${winner.articleText.length} chars`);
+  console.log(`\n🏆 Winner selected (random from all candidates):`);
+  console.log(`    [${winner.source}]`);
+  console.log(`    ${winner.title || winner.text.slice(0, 80)}`);
+  if (winner.articleText) console.log(`    Full article available: ${winner.articleText.length} chars`);
 
   // 8. Build the content bundle for the generator
   return buildBundle(winner);
 }
 
+// Helper: Explain scoring in human-readable format
+function getScoreBreakdown(item) {
+  const factors = [];
+  
+  const { sourceTier, hnScore, hfLikes, text, articleText, url } = item;
+  
+  // Source
+  if (sourceTier === 1) factors.push('Official source');
+  else if (sourceTier === 2) factors.push('Community platform');
+  else factors.push('Social signal');
+  
+  // Community signals
+  if (hnScore && hnScore > 20) factors.push(`HN: ${hnScore} points`);
+  if (hfLikes && hfLikes > 10) factors.push(`Popular: ${hfLikes} likes`);
+  
+  // Content quality
+  if (text.length > 300) factors.push('Substantial');
+  const numbers = (text.match(/\d+/g) || []).length;
+  if (numbers > 5) factors.push(`Data-rich: ${numbers} numbers`);
+  
+  if (articleText && articleText.length > 200) factors.push('Full article');
+  
+  return factors.join(' • ');
+}
 
 function buildBundle(story) {
   const parts = [];
-
-  parts.push(`SOURCE: ${story.source}${story.sourceTier === 1 ? ' (official/primary)' : ''}`);
-  if (story.url)     parts.push(`URL: ${story.resolvedUrl || story.url}`);
-  if (story.pubDate) parts.push(`DATE: ${story.pubDate.toISOString()}`);
-  parts.push('');
 
   if (story.title && story.title !== story.text) {
     parts.push(`HEADLINE: ${story.title}`);
     parts.push('');
   }
 
-  parts.push('SIGNAL (tweet / snippet):');
-  parts.push(story.text);
+  // Strip leading [SourceName] prefix from text so the AI doesn't see the origin
+  const cleanText = story.text.replace(/^\[[^\]]+\]\s*/, '');
+
+  parts.push('CONTENT:');
+  parts.push(cleanText);
 
   if (story.articleText) {
     parts.push('');

@@ -18,45 +18,35 @@ const ARXIV_FEEDS = [
   { name: 'arXiv cs.CL',  url: 'https://rss.arxiv.org/rss/cs.CL'  },
 ];
 
-// Only keep papers whose title/abstract touches practical AI topics
-const RELEVANCE_KEYWORDS = [
-  'large language model', 'llm', 'language model', 'transformer',
-  'instruction tun', 'fine-tun', 'reinforcement learning from human',
-  'rlhf', 'reasoning', 'chain-of-thought', 'agent', 'multimodal',
-  'retrieval', 'rag', 'benchmark', 'evaluation', 'inference',
-  'alignment', 'safety', 'hallucination', 'code generation',
-  'vision language', 'diffusion', 'embedding', 'context',
-];
-
-function isPracticallyRelevant(text) {
-  const lower = text.toLowerCase();
-  return RELEVANCE_KEYWORDS.some((kw) => lower.includes(kw));
-}
-
 function parseArxivFeed(xml, feedName) {
   const items = [];
   const itemRe   = /<item[\s\S]*?<\/item>/gi;
   const titleRe  = /<title[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/i;
   const descRe   = /<description[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i;
-  const linkRe   = /<link>(https?:\/\/[^<]+)<\/link>/i;
-  const dateRe   = /<pubDate[^>]*>([\s\S]*?)<\/pubDate>/i;
+  const linkRe   = /<id[^>]*>(https?:\/\/[^<]+)<\/id>/i;
+  const dateRe   = /<updated[^>]*>([\s\S]*?)<\/updated>/i;
 
   let m;
   while ((m = itemRe.exec(xml)) !== null) {
     const block  = m[0];
-    const title  = (titleRe.exec(block)?.[1] || '').replace(/<[^>]+>/g, '').trim();
-    const desc   = (descRe.exec(block)?.[1]  || '').replace(/<[^>]+>/g, '').trim().slice(0, 1000);
-    const url    = linkRe.exec(block)?.[1]?.trim() || null;
+    let title  = (titleRe.exec(block)?.[1] || '').replace(/<[^>]+>/g, '').trim();
+    let desc   = (descRe.exec(block)?.[1]  || '').replace(/<[^>]+>/g, '').trim().slice(0, 1000);
+    let url    = linkRe.exec(block)?.[1]?.trim() || null;
     const date   = dateRe.exec(block)?.[1];
 
-    // Skip generic feed-header items
-    if (!title || title.length < 15 || !desc || desc.length < 50) continue;
-    if (!isPracticallyRelevant(`${title} ${desc}`)) continue;
+    // Remove arxiv ID prefix from title
+    title = title.replace(/^\[\d{4}\.\d{5}\]\s*/, '');
+
+    // Skip truly empty items
+    if (!title || !desc) continue;
+    
+    // Very lenient - accept anything with at least 20 chars in title/desc combined
+    if ((title + desc).length < 50) continue;
 
     items.push({
-      text:       `[arXiv] ${title}. Abstract: ${desc}`,
+      text:       `[arXiv] ${title}. ${desc}`,
       title,
-      url,
+      url: url || `https://arxiv.org/abs/${title.match(/\d{4}\.\d{5}/)?.[0] || ''}`,
       pubDate:    date ? new Date(date.trim()) : null,
       source:     feedName,
       sourceTier: 1, // Papers are primary sources
